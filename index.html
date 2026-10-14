@@ -78,12 +78,16 @@
         <section class="hero-card">
           <div class="hero-kicker" data-i18n="currentOperation">现在操作</div>
           <div id="equation" class="equation" aria-live="polite">28 + 6 = ?</div>
-          <p id="heroHint">积木已经摆好，直接拖动；需要进位时自己把十个合成一块。</p>
+          <p id="heroHint">先从积木库摆出两组数字，再拖入合并区；满 10 个时自己进位。</p>
         </section>
 
         <section class="lab-panel">
           <div class="work-surface">
             <div class="block-workspace">
+              <section id="blockBank" class="block-bank" aria-label="Block supply">
+                <header><span class="bank-icon" aria-hidden="true">🧱</span><div><strong data-i18n="bankTitle">积木库</strong><p data-i18n="bankHint">从这里拖积木，先摆出题目的数字。</p></div></header>
+                <div id="bankGrid" class="place-grid bank-grid"></div>
+              </section>
               <div id="additionBoard" class="operation-board addition-board">
                 <section class="number-panel panel-a">
                   <header><span class="group-dot">A</span><strong data-i18n="groupA">第一组</strong><b id="valueA">28</b></header>
@@ -101,11 +105,11 @@
 
               <div id="subtractionBoard" class="operation-board subtraction-board" hidden>
                 <section class="number-panel panel-a wide-panel">
-                  <header><span class="group-dot">A</span><strong data-i18n="startAmount">原有积木</strong><b id="subValueA">32</b></header>
+                  <header><span class="group-dot">A</span><strong data-i18n="startAmount">正在操作的积木</strong><b id="subValueA">从 32 开始</b></header>
                   <div id="minuendGrid" class="place-grid"></div>
                 </section>
                 <section class="number-panel removed-panel">
-                  <header><span class="group-dot">−</span><strong data-i18n="takeAwayTray">减去区</strong><b id="removedProgress">0 / 9</b></header>
+                  <header><span class="group-dot">🗑</span><strong data-i18n="takeAwayTray">回收桶 · 要减</strong><b id="takeAwayTarget">9</b></header>
                   <div id="removedGrid" class="place-grid"></div>
                 </section>
               </div>
@@ -116,8 +120,8 @@
               <div class="eyebrow" data-i18n="workingTitle">同步竖式</div>
               <div id="verticalFormula" class="vertical-formula" aria-live="polite"></div>
               <ol class="step-list" aria-label="Steps">
-                <li data-step="1"><span class="step-number">1</span><div><strong data-i18n="stepMoveTitle">自己拖动</strong><p id="stepMoveText"></p></div></li>
-                <li data-step="2"><span class="step-number">2</span><div><strong data-i18n="stepExchangeTitle">自己进位／借位</strong><p id="stepExchangeText"></p></div></li>
+                <li data-step="1"><span class="step-number">1</span><div><strong data-i18n="stepMoveTitle">先摆出数字</strong><p id="stepMoveText"></p></div></li>
+                <li data-step="2"><span class="step-number">2</span><div><strong data-i18n="stepExchangeTitle">自己移动与换位</strong><p id="stepExchangeText"></p></div></li>
                 <li data-step="3"><span class="step-number">3</span><div><strong data-i18n="stepFormulaTitle">从上往下看竖式</strong><p id="stepFormulaText"></p></div></li>
               </ol>
             </aside>

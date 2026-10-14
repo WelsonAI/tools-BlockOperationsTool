@@ -49,16 +49,18 @@ Reference examples observed in the material include `24 + 3`, `17 + 20`, `14 + 2
 - Only block addition and subtraction are included.
 - No counting tool, number pattern tool, random question generator, quiz mode, or Q&A flow.
 - Numbers are entered manually; there is no fixed 40/100/1000 range selector.
-- The default blocks appear immediately on page load, ready for pupils to drag.
+- The block supply appears immediately, but the addition and subtraction number panels start empty. Pupils must build the given number(s) before operating.
 - The answer starts as `?` and is shown only after the learner completes the block operation.
 - Reuse the one, ten, hundred, and thousand visual blocks from the previous Block Math tool. Higher place-value units have a clearly labelled tile.
 - Addition must visibly demonstrate:
-  - Pupils drag the two groups into matching place-value columns.
+  - Pupils build both groups from the reusable block supply, then drag the groups into matching result columns.
   - When 10 blocks collect in a result column, pupils drag a yellow bundle to the next higher column to combine them into one.
 - Subtraction must visibly demonstrate:
-  - Pupils drag blocks into the taken-away area.
+  - Pupils build the starting number from the supply, then drag blocks into a recycle bin labelled with the number to subtract, without a pre-decomposed answer hint or a `9/9`-style block counter.
+  - Pupils can drag a mistaken block from the recycle bin back to its original place, including after the answer first appears.
   - When there are too few blocks, pupils drag one block from a higher column to the adjacent lower column and split it into 10. Consecutive borrowing across zero columns is supported.
 - Blocks must support smooth pointer dragging. Tapping a block and keyboard Enter/Space are also supported.
+- Ones are arranged exactly five per row. On narrow screens, the place-value columns stack vertically to keep all relevant columns visible.
 - The vertical working is visible on the right from the start. It shows user-performed carries/borrows and fills result digits as the blocks are settled.
 - The three guidance steps run from top to bottom. There are no exchange, next-step, or formula-modal buttons.
 - Languages: Bahasa Melayu, Chinese, and English.
@@ -80,7 +82,7 @@ Main files:
 - `tests/smoke.mjs` — Chrome DevTools Protocol smoke test.
 - `.gitignore` — excludes screenshots and temporary Chrome profiles.
 
-Default demonstration: `28 + 6`, ready for dragging on page load. The pupil combines 10 ones into 1 ten.
+Default demonstration: `28 + 6`. The A and B panels start empty; pupils drag blocks from the supply to make 28 and 6, then combine 10 ones into 1 ten.
 
 Subtraction regression example: `32 − 9`, which requires splitting 1 ten into 10 ones.
 
@@ -98,10 +100,13 @@ The automated smoke test passed all of the following:
 - JavaScript syntax checks.
 - All block images load successfully.
 - Answer is hidden before completion.
-- The default blocks are ready and the vertical working is visible before any click.
-- A real pointer drag places a block into the matching result column.
+- The default A and B panels are empty, the block supply is ready, and the vertical working is visible before any click.
+- A real pointer drag places a block from the supply into A; then the learner builds the rest and can drag into the result.
 - `28 + 6`: pupil drags the yellow ten-block bundle to carry and finishes at 34.
 - `32 − 9`: pupil drags a ten to the ones column to borrow and finishes at 23.
+- The subtraction board starts empty. Its recycle bin shows only the target number, and a taken-away block can be dragged back from the bin after completion.
+- `500 − 28`: the learner builds 500, borrows twice, removes 28 by value, and finishes at 472; the bin no longer misleadingly reports `10/10` blocks.
+- Ones form rows of five on desktop and mobile; mobile place-value columns stack without page overflow.
 - `1000 − 1`: three consecutive pupil-driven borrows finish at 999.
 - `999 + 1`: three consecutive pupil-driven carries finish at 1000.
 - A 20-digit user-entered number creates 20 place-value columns without a range choice.
@@ -124,7 +129,7 @@ node tests\smoke.mjs
 
 ## Next steps
 
-The first test version was revised following the user's instructions: immediate student dragging, an always-visible vertical working area on the right, manual carrying and borrowing, open number inputs, and steps arranged top to bottom. Treat this as a testing version until the user reviews it.
+The test version now starts with empty number panels and a reusable block supply. Pupils build the given numbers before combining or subtracting; subtraction uses a reversible recycle bin labelled with the target number only. Ones are grouped five per row. Treat this as a testing version until the user reviews it.
 
 1. The project is pushed to `WelsonAI/tools-BlockOperationsTool` on branch `main`.
 2. The live GitHub Pages testing link is `https://welsonai.github.io/tools-BlockOperationsTool/` (HTTP 200 verified on 2026-10-14).

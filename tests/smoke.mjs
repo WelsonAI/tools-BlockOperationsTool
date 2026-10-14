@@ -101,18 +101,27 @@ try {
   const initial = await evaluate(`({
     equation: document.querySelector("#equation").textContent,
     formula: document.querySelector("#verticalFormula").textContent,
+    bank: document.querySelectorAll('#bankGrid .math-block').length,
+    firstEmpty: document.querySelectorAll('#sourceAGrid .math-block').length === 0,
+    secondEmpty: document.querySelectorAll('#sourceBGrid .math-block').length === 0,
     noRange: !document.querySelector("#rangeSelect"),
     noExchangeButton: !document.querySelector("#exchangeBtn"),
     stepsVertical: document.querySelectorAll(".step-list li")[0].getBoundingClientRect().top < document.querySelectorAll(".step-list li")[1].getBoundingClientRect().top,
     imagesLoaded: [...document.images].every(image => image.complete && image.naturalWidth > 0),
     overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth
   })`);
-  assert(initial.equation.includes("28 + 6 = ?"), "Blocks should be ready with the answer hidden.");
+  assert(initial.equation.includes("28 + 6 = ?"), "The answer should start hidden.");
+  assert(initial.bank === 2 && initial.firstEmpty && initial.secondEmpty, "Addition must start with empty A and B groups and a block supply.");
   assert(initial.formula.includes("?"), "The vertical working should be visible before the answer.");
   assert(initial.noRange && initial.noExchangeButton && initial.stepsVertical, "The old gated layout is still present.");
   assert(initial.imagesLoaded && !initial.overflow, "Initial assets or desktop layout failed.");
   await screenshot("redesign-desktop.png");
 
+  await drag('[data-role="bank"][data-index="0"] .math-block', '[data-role="sourceA"][data-index="0"]');
+  await waitFor(`document.querySelectorAll('[data-role="sourceA"][data-index="0"] .math-block').length === 1`);
+  await pressFirst('[data-role="bank"][data-index="0"] .math-block', 13);
+  await pressFirst('[data-role="bank"][data-index="1"] .math-block', 2);
+  await waitFor(`document.querySelector('#blockBank').hidden && document.querySelectorAll('#sourceBGrid .math-block').length === 6`);
   await drag('[data-role="sourceA"][data-index="0"] .math-block', '[data-role="result"][data-index="0"]');
   await waitFor(`document.querySelectorAll('[data-role="result"][data-index="0"] .math-block').length === 1`);
   await pressFirst('[data-role="sourceA"][data-index="0"] .math-block, [data-role="sourceB"][data-index="0"] .math-block', 13);
@@ -127,6 +136,10 @@ try {
 
   await evaluate(`document.querySelector('[data-operation="subtraction"]').click()`);
   await setNumbers("32", "9");
+  assert(await evaluate(`document.querySelectorAll('#minuendGrid .math-block').length === 0 && document.querySelector('#takeAwayTarget').textContent === '9' && !document.querySelector('#removedProgress')`), "Subtraction must start empty with only the target number shown on the recycle bin.");
+  await pressFirst('[data-role="bank"][data-index="0"] .math-block', 2);
+  await pressFirst('[data-role="bank"][data-index="1"] .math-block', 3);
+  await waitFor(`document.querySelector('#blockBank').hidden`);
   await drag('[data-role="minuend"][data-index="1"] .math-block', '[data-role="minuend"][data-index="0"]');
   await waitFor(`document.querySelectorAll('[data-role="minuend"][data-index="0"] .math-block').length === 12`);
   await screenshot("redesign-borrow-done.png");
@@ -134,8 +147,13 @@ try {
   await pressFirst('[data-role="minuend"][data-index="0"] .math-block', 9);
   await waitFor(`document.querySelector('#equation').textContent.includes('= 23')`);
   assert(await evaluate(`document.querySelectorAll('[data-role="minuend"][data-index="0"] .math-block').length === 3`), "Subtraction blocks do not show 23.");
+  await drag('[data-role="removed"][data-index="0"] .math-block', '[data-role="minuend"][data-index="0"]');
+  await waitFor(`document.querySelector('#equation').textContent.includes('= ?') && document.querySelectorAll('[data-role="minuend"][data-index="0"] .math-block').length === 4`);
+  await drag('[data-role="minuend"][data-index="0"] .math-block', '[data-role="removed"][data-index="0"]');
+  await waitFor(`document.querySelector('#equation').textContent.includes('= 23')`);
 
   await setNumbers("1000", "1");
+  await pressFirst('[data-role="bank"][data-index="3"] .math-block', 1);
   for (const from of [3, 2, 1]) {
     await drag(`[data-role="minuend"][data-index="${from}"] .math-block`, `[data-role="minuend"][data-index="${from - 1}"]`);
     await waitFor(`document.querySelectorAll('[data-role="minuend"][data-index="${from - 1}"] .math-block').length === 10`);
@@ -143,8 +161,30 @@ try {
   await pressFirst('[data-role="minuend"][data-index="0"] .math-block', 1);
   await waitFor(`document.querySelector('#equation').textContent.includes('= 999')`);
 
+  await setNumbers("500", "28");
+  await pressFirst('[data-role="bank"][data-index="2"] .math-block', 5);
+  await waitFor(`document.querySelector('#blockBank').hidden`);
+  await drag('[data-role="minuend"][data-index="2"] .math-block', '[data-role="minuend"][data-index="1"]');
+  await waitFor(`document.querySelectorAll('[data-role="minuend"][data-index="1"] .math-block').length === 10`);
+  await drag('[data-role="minuend"][data-index="1"] .math-block', '[data-role="minuend"][data-index="0"]');
+  await waitFor(`document.querySelectorAll('[data-role="minuend"][data-index="0"] .math-block').length === 10`);
+  const fivePerRow = await evaluate(`(() => {
+    const blocks = [...document.querySelectorAll('[data-role="minuend"][data-index="0"] .math-block')];
+    const tops = blocks.map(block => Math.round(block.getBoundingClientRect().top));
+    return tops.length === 10 && tops.slice(0, 5).every(top => top === tops[0]) && tops[5] > tops[0] && tops.slice(5).every(top => top === tops[5]);
+  })()`);
+  assert(fivePerRow, "Ones must be arranged five per row.");
+  await pressFirst('[data-role="minuend"][data-index="0"] .math-block', 8);
+  await pressFirst('[data-role="minuend"][data-index="1"] .math-block', 2);
+  await waitFor(`document.querySelector('#equation').textContent.includes('= 472')`);
+  assert(await evaluate(`document.querySelector('#takeAwayTarget').textContent === '28' && document.querySelector('#subValueA').textContent.includes('从 500 开始') && !document.querySelector('#subtractionBoard').textContent.includes('10 / 10')`), "The subtraction target or regrouping label is misleading.");
+  await screenshot("redesign-subtraction-500-28.png");
+
   await evaluate(`document.querySelector('[data-operation="addition"]').click()`);
   await setNumbers("999", "1");
+  await pressFirst('[data-role="bank"][data-index="0"] .math-block', 10);
+  await pressFirst('[data-role="bank"][data-index="1"] .math-block', 9);
+  await pressFirst('[data-role="bank"][data-index="2"] .math-block', 9);
   for (let place = 0; place < 3; place += 1) {
     const amount = place === 0 ? 10 : 9;
     await pressFirst(`[data-role="sourceA"][data-index="${place}"] .math-block, [data-role="sourceB"][data-index="${place}"] .math-block`, amount);
@@ -173,8 +213,18 @@ try {
   await setNumbers("28", "6");
   const fullMobile = await send("Page.captureScreenshot", { format: "png", captureBeyondViewport: true });
   await fs.writeFile(new URL("redesign-mobile-full.png", import.meta.url), Buffer.from(fullMobile.data, "base64"));
+  await pressFirst('[data-role="bank"][data-index="0"] .math-block', 14);
+  await pressFirst('[data-role="bank"][data-index="1"] .math-block', 2);
+  await waitFor(`document.querySelector('#blockBank').hidden`);
+  assert(await evaluate(`(() => {
+    const blocks = [...document.querySelectorAll('[data-role="sourceA"][data-index="0"] .math-block')];
+    const tops = blocks.map(block => Math.round(block.getBoundingClientRect().top));
+    return tops.length === 8 && tops.slice(0, 5).every(top => top === tops[0]) && tops.slice(5).every(top => top > tops[0]) && document.documentElement.scrollWidth <= document.documentElement.clientWidth;
+  })()`), "Mobile ones do not show five per row without page overflow.");
+  const assembledMobile = await send("Page.captureScreenshot", { format: "png", captureBeyondViewport: true });
+  await fs.writeFile(new URL("redesign-mobile-assembled.png", import.meta.url), Buffer.from(assembledMobile.data, "base64"));
   assert(errors.length === 0, `Browser errors: ${errors.join("; ")}`);
-  console.log("PASS: immediate drag, live vertical working, manual carry and borrow, unrestricted input, cascading borrow, languages, mobile layout.");
+  console.log("PASS: empty starting boards, block supply, live working, manual carry and borrow, reversible recycle bin, unrestricted input, languages, mobile layout.");
 } finally {
   socket.close();
 }

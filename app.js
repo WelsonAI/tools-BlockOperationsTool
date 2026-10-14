@@ -8,26 +8,30 @@
       firstNumber: "第一个数", secondNumber: "第二个数", build: "更换数字", reset: "重置工具",
       sourceScopeTitle: "自由操作位值积木", noRandom: "数字由你输入，没有随机题目或固定范围。",
       handsOn: "动手试试！", currentOperation: "现在操作", freeNumbers: "自由数字",
-      groupA: "第一组", groupB: "第二组", combineArea: "合并区", startAmount: "原有积木",
-      takeAwayTray: "减去区", workingTitle: "同步竖式", stepMoveTitle: "自己拖动",
-      stepExchangeTitle: "自己进位／借位", stepFormulaTitle: "从上往下看竖式",
+      groupA: "第一组", groupB: "第二组", combineArea: "合并区", startAmount: "正在操作的积木", startingFrom: value => `从 ${value} 开始`,
+      bankTitle: "积木库", bankHint: "先从这里拖积木，自己摆出题目的数字。",
+      takeAwayTray: "回收桶 · 要减", workingTitle: "同步竖式", stepMoveTitle: "先摆出数字",
+      stepExchangeTitle: "自己移动与换位", stepFormulaTitle: "从上往下看竖式",
       oneBlock: "1 个位", tenBlock: "1 个十位 = 10 个个位",
       hundredBlock: "1 个百位 = 10 个十位", thousandBlock: "1 个千位 = 10 个百位",
       placeNames: ["个位", "十位", "百位", "千位"], higherPlace: power => `10^${power} 位`,
       additionTitle: "积木加法实验室", subtractionTitle: "积木减法实验室",
       scopeAddition: "输入你要演示的数字；学生自己拖动积木，并把每 10 个同位积木进位。",
       scopeSubtraction: "输入你要演示的数字；学生自己拖走积木，不够时把高一位拆成 10 个。",
-      heroAdd: "积木已摆好。把两组拖入合并区；满 10 个时拖动黄色组合牌进位。",
-      heroSub: "积木已摆好。拖到减去区；不够时把高一位积木拖到低一位借位。",
-      readyAdd: "拖动两组积木到相同位值的合并区。",
-      readySub: "拖走需要减去的积木；不够就自己从高一位借。",
-      moveProgress: (done, total) => `已移动 ${done} / ${total} 块。`,
-      removeProgress: (done, total) => `已减去 ${done} / ${total} 块。`,
+      heroAdd: "先从积木库摆出两组数字，再拖入合并区；满 10 个时自己进位。",
+      heroSub: "先从积木库摆出原有数字，再把要减掉的积木拖进回收桶；不够时自己借位。",
+      readyAdd: "A、B 两组还是空的。先从积木库摆出题目的两个数。",
+      readySub: "原有积木区还是空的。先从积木库摆出第一个数。",
+      buildProgress: count => `已摆入 ${count} 块积木；对照上面的数字继续摆。`,
+      buildReady: "数字已摆好，可以开始移动积木。",
+      buildDone: "摆对了！现在开始运算。", returnDone: "已把积木放回积木库。", undoDone: "已从回收桶放回原来的位值栏。",
+      moveProgress: done => `已移到合并区 ${done} 块。`,
+      removeProgress: () => "按位值把积木放进回收桶；放错可拖回原位。",
       exchangeIdle: "需要时，由你自己拖动积木换位。",
       carryReady: (from, to) => `把 10 个${from}拖到${to}，合成 1 块。`,
       borrowReady: (from, to) => `把 1 个${from}拖到${to}，拆成 10 块。`,
       exchangeCount: count => `你已完成 ${count} 次进位／借位。`,
-      formulaProgress: (done, total) => `右边每一位会随着操作填写：${done} / ${total} 位。`,
+      formulaProgress: () => "右边竖式会随着操作逐位填写。",
       formulaDone: "竖式已完成；结果由你摆出的积木得到。",
       carryToken: (from, to) => `拖这 10 个${from}到${to}`,
       carryDone: (from, to) => `你把 10 个${from}合成了 1 个${to}。`,
@@ -44,25 +48,29 @@
       firstNumber: "First number", secondNumber: "Second number", build: "Change numbers", reset: "Reset tool",
       sourceScopeTitle: "Explore place-value blocks freely", noRandom: "You choose the numbers. There are no random questions or preset ranges.",
       handsOn: "Try it!", currentOperation: "Current operation", freeNumbers: "Open numbers",
-      groupA: "First group", groupB: "Second group", combineArea: "Combine area", startAmount: "Starting blocks",
-      takeAwayTray: "Taken-away area", workingTitle: "Live vertical working", stepMoveTitle: "Drag the blocks",
-      stepExchangeTitle: "Carry or borrow yourself", stepFormulaTitle: "Read the working top to bottom",
+      groupA: "First group", groupB: "Second group", combineArea: "Combine area", startAmount: "Working blocks", startingFrom: value => `Started with ${value}`,
+      bankTitle: "Block supply", bankHint: "Drag blocks from here to build the numbers yourself.",
+      takeAwayTray: "Recycle bin · take away", workingTitle: "Live vertical working", stepMoveTitle: "Build the numbers",
+      stepExchangeTitle: "Move and regroup yourself", stepFormulaTitle: "Read the working top to bottom",
       oneBlock: "1 one", tenBlock: "1 ten = 10 ones", hundredBlock: "1 hundred = 10 tens",
       thousandBlock: "1 thousand = 10 hundreds", placeNames: ["ones", "tens", "hundreds", "thousands"],
       higherPlace: power => `10^${power} place`, additionTitle: "Block Addition Lab", subtractionTitle: "Block Subtraction Lab",
       scopeAddition: "Enter numbers to demonstrate. Pupils move the blocks and carry each group of 10 themselves.",
       scopeSubtraction: "Enter numbers to demonstrate. Pupils take blocks away and split a higher block when needed.",
-      heroAdd: "The blocks are ready. Drag both groups into the result; drag the yellow bundle to carry 10.",
-      heroSub: "The blocks are ready. Drag blocks away; if there are too few, drag a higher block one place lower.",
-      readyAdd: "Drag both groups into the matching place-value columns.",
-      readySub: "Take away the required blocks. Borrow from the next place when needed.",
-      moveProgress: (done, total) => `${done} / ${total} blocks moved.`,
-      removeProgress: (done, total) => `${done} / ${total} blocks taken away.`,
+      heroAdd: "Build both numbers from the block supply, then combine them. Carry each group of 10 yourself.",
+      heroSub: "Build the starting number from the block supply, then drag blocks into the recycle bin. Borrow yourself when needed.",
+      readyAdd: "Both groups are empty. Build the two numbers from the block supply first.",
+      readySub: "The starting area is empty. Build the first number from the block supply.",
+      buildProgress: count => `${count} blocks placed. Keep checking the numbers above.`,
+      buildReady: "The numbers are built. You can start moving blocks.",
+      buildDone: "Built correctly! Now work out the operation.", returnDone: "Block returned to the supply.", undoDone: "Block returned from the recycle bin to its place.",
+      moveProgress: done => `${done} blocks moved to the combine area.`,
+      removeProgress: () => "Move blocks by place value into the recycle bin. Drag mistakes back.",
       exchangeIdle: "When needed, drag the blocks to regroup them yourself.",
       carryReady: (from, to) => `Drag 10 ${from} to ${to} to make one block.`,
       borrowReady: (from, to) => `Drag one ${from} to ${to} to split it into 10.`,
       exchangeCount: count => `You have regrouped ${count} time${count === 1 ? "" : "s"}.`,
-      formulaProgress: (done, total) => `The working fills as you move blocks: ${done} / ${total} places.`,
+      formulaProgress: () => "The vertical working fills as you move the blocks.",
       formulaDone: "The vertical working is complete and matches your blocks.",
       carryToken: (from, to) => `Drag these 10 ${from} to ${to}`,
       carryDone: (from, to) => `You made 1 ${to} from 10 ${from}.`,
@@ -79,25 +87,29 @@
       firstNumber: "Nombor pertama", secondNumber: "Nombor kedua", build: "Tukar nombor", reset: "Set semula alat",
       sourceScopeTitle: "Teroka blok nilai tempat dengan bebas", noRandom: "Anda pilih nombor. Tiada soalan rawak atau julat tetap.",
       handsOn: "Mari cuba!", currentOperation: "Operasi sekarang", freeNumbers: "Nombor bebas",
-      groupA: "Kumpulan pertama", groupB: "Kumpulan kedua", combineArea: "Ruang gabung", startAmount: "Blok asal",
-      takeAwayTray: "Ruang ditolak", workingTitle: "Bentuk lazim langsung", stepMoveTitle: "Seret blok sendiri",
-      stepExchangeTitle: "Kumpul atau pinjam sendiri", stepFormulaTitle: "Baca dari atas ke bawah",
+      groupA: "Kumpulan pertama", groupB: "Kumpulan kedua", combineArea: "Ruang gabung", startAmount: "Blok yang sedang digunakan", startingFrom: value => `Bermula dengan ${value}`,
+      bankTitle: "Bekalan blok", bankHint: "Seret blok dari sini untuk bina nombor sendiri.",
+      takeAwayTray: "Tong kitar semula · tolak", workingTitle: "Bentuk lazim langsung", stepMoveTitle: "Bina nombor dahulu",
+      stepExchangeTitle: "Gerak dan kumpul semula sendiri", stepFormulaTitle: "Baca dari atas ke bawah",
       oneBlock: "1 sa", tenBlock: "1 puluh = 10 sa", hundredBlock: "1 ratus = 10 puluh",
       thousandBlock: "1 ribu = 10 ratus", placeNames: ["sa", "puluh", "ratus", "ribu"],
       higherPlace: power => `nilai 10^${power}`, additionTitle: "Makmal Tambah Blok", subtractionTitle: "Makmal Tolak Blok",
       scopeAddition: "Masukkan nombor sendiri. Murid menggerakkan blok dan mengumpul setiap 10 blok sendiri.",
       scopeSubtraction: "Masukkan nombor sendiri. Murid menolak blok dan memecahkan blok nilai lebih tinggi apabila perlu.",
-      heroAdd: "Blok sudah tersedia. Seret kedua-dua kumpulan ke ruang gabung; seret ikatan kuning untuk mengumpul 10.",
-      heroSub: "Blok sudah tersedia. Seret blok ke ruang ditolak; jika tidak cukup, seret blok lebih tinggi satu tempat ke kanan.",
-      readyAdd: "Seret kedua-dua kumpulan ke lajur nilai tempat yang sepadan.",
-      readySub: "Keluarkan blok yang perlu ditolak. Pinjam dari tempat lebih tinggi apabila perlu.",
-      moveProgress: (done, total) => `${done} / ${total} blok telah dipindahkan.`,
-      removeProgress: (done, total) => `${done} / ${total} blok telah ditolak.`,
+      heroAdd: "Bina kedua-dua nombor daripada bekalan blok, kemudian gabungkan. Kumpul semula setiap 10 blok sendiri.",
+      heroSub: "Bina nombor asal daripada bekalan blok, kemudian seret blok yang ditolak ke tong kitar semula. Pinjam sendiri jika perlu.",
+      readyAdd: "Kedua-dua kumpulan masih kosong. Bina nombor daripada bekalan blok dahulu.",
+      readySub: "Ruang blok asal masih kosong. Bina nombor pertama daripada bekalan blok.",
+      buildProgress: count => `${count} blok telah disusun. Semak nombor di atas dan teruskan.`,
+      buildReady: "Nombor sudah dibina. Sekarang gerakkan blok.",
+      buildDone: "Betul! Sekarang mulakan operasi.", returnDone: "Blok dikembalikan ke bekalan.", undoDone: "Blok dipulangkan dari tong kitar semula ke tempat asal.",
+      moveProgress: done => `${done} blok dipindah ke ruang gabung.`,
+      removeProgress: () => "Seret blok mengikut nilai tempat ke tong kitar semula. Kesilapan boleh dipulangkan.",
       exchangeIdle: "Apabila perlu, seret blok untuk mengumpul semula sendiri.",
       carryReady: (from, to) => `Seret 10 ${from} ke ${to} untuk membuat satu blok.`,
       borrowReady: (from, to) => `Seret satu ${from} ke ${to} untuk memecahkannya menjadi 10.`,
       exchangeCount: count => `Anda sudah mengumpul semula ${count} kali.`,
-      formulaProgress: (done, total) => `Bentuk lazim terisi semasa blok digerakkan: ${done} / ${total} tempat.`,
+      formulaProgress: () => "Bentuk lazim terisi apabila blok digerakkan.",
       formulaDone: "Bentuk lazim lengkap dan sepadan dengan blok anda.",
       carryToken: (from, to) => `Seret 10 ${from} ini ke ${to}`,
       carryDone: (from, to) => `Anda membina 1 ${to} daripada 10 ${from}.`,
@@ -116,20 +128,22 @@
     resetBtn: document.getElementById("resetBtn"), scopeText: document.getElementById("scopeText"),
     activityTitle: document.getElementById("activityTitle"), equation: document.getElementById("equation"),
     heroHint: document.getElementById("heroHint"), additionBoard: document.getElementById("additionBoard"),
-    subtractionBoard: document.getElementById("subtractionBoard"), sourceAGrid: document.getElementById("sourceAGrid"),
+    subtractionBoard: document.getElementById("subtractionBoard"), bank: document.getElementById("blockBank"),
+    bankGrid: document.getElementById("bankGrid"), sourceAGrid: document.getElementById("sourceAGrid"),
     sourceBGrid: document.getElementById("sourceBGrid"), resultGrid: document.getElementById("resultGrid"),
     minuendGrid: document.getElementById("minuendGrid"), removedGrid: document.getElementById("removedGrid"),
+    takeAwayTarget: document.getElementById("takeAwayTarget"),
     valueA: document.getElementById("valueA"), valueB: document.getElementById("valueB"),
     resultValue: document.getElementById("resultValue"), subValueA: document.getElementById("subValueA"),
-    removedProgress: document.getElementById("removedProgress"), feedback: document.getElementById("feedback"),
+    feedback: document.getElementById("feedback"),
     verticalFormula: document.getElementById("verticalFormula"), stepMoveText: document.getElementById("stepMoveText"),
     stepExchangeText: document.getElementById("stepExchangeText"), stepFormulaText: document.getElementById("stepFormulaText")
   };
 
   const state = {
     lang: "zh", operation: "addition", a: 28n, b: 6n, size: 2,
-    built: false, complete: false, busy: false,
-    sourceA: [], sourceB: [], result: [], remaining: [], removed: [], target: [],
+    built: false, assembled: false, complete: false, busy: false,
+    sourceA: [], sourceB: [], result: [], remaining: [], removed: [], target: [], targetA: [],
     carryInto: [], borrowFrom: [], borrowInto: [], exchanges: 0
   };
 
@@ -155,11 +169,16 @@
 
   function createGrid(container, role) {
     container.replaceChildren();
+    container.classList.toggle("stack-places", state.size <= 3);
     container.style.setProperty("--place-count", state.size);
-    container.style.minWidth = `${Math.max(280, state.size * 96)}px`;
+    const hasFiveWideOnes = role !== "bank";
+    container.style.minWidth = `${Math.max(role === "bank" ? 192 : 280, (state.size - 1) * 96 + (hasFiveWideOnes ? 260 : 96))}px`;
+    container.style.gridTemplateColumns = Array.from({ length: state.size }, (_, position) =>
+      hasFiveWideOnes && position === state.size - 1 ? "minmax(260px, 1fr)" : "minmax(96px, 1fr)").join(" ");
     for (let index = state.size - 1; index >= 0; index -= 1) {
       const column = document.createElement("div");
       column.className = "place-column";
+      column.dataset.index = String(index);
       const label = document.createElement("div");
       label.className = "place-label";
       label.dataset.placeLabel = String(index);
@@ -259,10 +278,11 @@
     state.b = values.b;
     const result = state.operation === "addition" ? values.a + values.b : values.a - values.b;
     state.size = Math.max(1, values.a.toString().length, values.b.toString().length, result.toString().length);
-    state.sourceA = digitArray(values.a, state.size);
-    state.sourceB = digitArray(values.b, state.size);
+    state.targetA = digitArray(values.a, state.size);
+    state.sourceA = zeroes();
+    state.sourceB = zeroes();
     state.result = zeroes();
-    state.remaining = digitArray(values.a, state.size);
+    state.remaining = zeroes();
     state.removed = zeroes();
     state.target = digitArray(values.b, state.size);
     state.carryInto = zeroes();
@@ -272,8 +292,10 @@
     state.complete = false;
     state.busy = false;
     state.built = true;
+    state.assembled = assemblyReady();
 
     [
+      [el.bankGrid, "bank"],
       [el.sourceAGrid, "sourceA"], [el.sourceBGrid, "sourceB"], [el.resultGrid, "result"],
       [el.minuendGrid, "minuend"], [el.removedGrid, "removed"]
     ].forEach(([container, role]) => createGrid(container, role));
@@ -282,11 +304,17 @@
     checkComplete();
     render();
     requestAnimationFrame(() => {
-      document.querySelectorAll(".number-panel").forEach(panel => { panel.scrollLeft = panel.scrollWidth; });
+      document.querySelectorAll(".number-panel, .block-bank").forEach(panel => { panel.scrollLeft = panel.scrollWidth; });
       el.verticalFormula.scrollLeft = el.verticalFormula.scrollWidth;
     });
     showFeedback(state.complete ? tr().complete(answer().toString()) : state.operation === "addition" ? tr().readyAdd : tr().readySub,
       state.complete ? "success" : "");
+  }
+
+  function assemblyReady() {
+    if (state.operation === "addition") return state.sourceA.every((count, index) => count === state.targetA[index]) &&
+      state.sourceB.every((count, index) => count === state.target[index]);
+    return state.remaining.every((count, index) => count === state.targetA[index]);
   }
 
   function borrowSourceIndex() {
@@ -306,10 +334,19 @@
   }
 
   function canDrag(token) {
-    if (!state.built || state.complete || state.busy) return false;
+    if (!state.built || state.busy) return false;
     const index = Number(token.dataset.index);
-    if (token.dataset.kind === "carry") return state.operation === "addition" && state.result[index] >= 10;
-    if (state.operation === "addition") return token.dataset.origin === "sourceA" || token.dataset.origin === "sourceB";
+    const origin = token.dataset.origin;
+    if (token.dataset.kind === "carry") return state.assembled && !state.complete && state.operation === "addition" && state.result[index] >= 10;
+    if (origin === "bank") return !state.assembled && (state.operation === "addition" ?
+      state.sourceA[index] < state.targetA[index] || state.sourceB[index] < state.target[index] :
+      state.remaining[index] < state.targetA[index]);
+    if (!state.assembled) return state.operation === "addition" ?
+      (origin === "sourceA" && state.sourceA[index] > 0) || (origin === "sourceB" && state.sourceB[index] > 0) :
+      origin === "minuend" && state.remaining[index] > 0;
+    if (state.operation === "addition") return !state.complete && (origin === "sourceA" || origin === "sourceB");
+    if (origin === "removed") return state.removed[index] > 0;
+    if (state.complete) return false;
     return token.dataset.origin === "minuend" &&
       (state.removed[index] < state.target[index] || index === borrowSourceIndex());
   }
@@ -319,7 +356,15 @@
     const index = Number(token.dataset.index);
     const targetIndex = Number(target.dataset.index);
     if (token.dataset.kind === "carry") return target.dataset.role === "result" && targetIndex === index + 1;
+    if (!state.assembled) {
+      if (token.dataset.origin === "bank") return targetIndex === index && (state.operation === "addition" ?
+        target.dataset.role === "sourceA" && state.sourceA[index] < state.targetA[index] ||
+        target.dataset.role === "sourceB" && state.sourceB[index] < state.target[index] :
+        target.dataset.role === "minuend" && state.remaining[index] < state.targetA[index]);
+      return target.dataset.role === "bank" && targetIndex === index;
+    }
     if (state.operation === "addition") return target.dataset.role === "result" && targetIndex === index;
+    if (token.dataset.origin === "removed") return target.dataset.role === "minuend" && targetIndex === index;
     return (target.dataset.role === "removed" && targetIndex === index && state.removed[index] < state.target[index]) ||
       (target.dataset.role === "minuend" && targetIndex === index - 1 && index === borrowSourceIndex());
   }
@@ -386,7 +431,16 @@
     if (!canDrag(token)) return;
     const index = Number(token.dataset.index);
     if (token.dataset.kind === "carry") { void carry(index); return; }
+    if (!state.assembled) {
+      if (token.dataset.origin === "bank") {
+        const role = state.operation === "subtraction" ? "minuend" :
+          state.sourceA[index] < state.targetA[index] ? "sourceA" : "sourceB";
+        placeFromBank(role, index);
+      } else returnToBank(token.dataset.origin, index);
+      return;
+    }
     if (state.operation === "addition") { moveUnit(token.dataset.origin, index); return; }
+    if (token.dataset.origin === "removed") { undoRemoval(index); return; }
     if (state.removed[index] < state.target[index]) moveUnit("minuend", index);
     else if (index === borrowSourceIndex()) void borrow(index);
   }
@@ -394,8 +448,47 @@
   function performDrop(token, target) {
     const index = Number(token.dataset.index);
     if (token.dataset.kind === "carry") { void carry(index); return; }
+    if (!state.assembled) {
+      if (token.dataset.origin === "bank") placeFromBank(target.dataset.role, index);
+      else returnToBank(token.dataset.origin, index);
+      return;
+    }
+    if (token.dataset.origin === "removed") { undoRemoval(index); return; }
     if (state.operation === "addition" || target.dataset.role === "removed") moveUnit(token.dataset.origin, index);
     else void borrow(index);
+  }
+
+  function placeFromBank(role, index) {
+    const collection = role === "minuend" ? state.remaining : state[role];
+    const limit = role === "sourceB" ? state.target[index] : state.targetA[index];
+    if (state.assembled || !collection || collection[index] >= limit) return;
+    collection[index] += 1;
+    state.assembled = assemblyReady();
+    checkComplete();
+    render();
+    showFeedback(state.complete ? tr().complete(answer().toString()) : state.assembled ? tr().buildDone : tr().buildProgress(assemblyCount()),
+      state.assembled ? "success" : "");
+  }
+
+  function returnToBank(role, index) {
+    const collection = role === "minuend" ? state.remaining : state[role];
+    if (state.assembled || !collection || collection[index] <= 0) return;
+    collection[index] -= 1;
+    render();
+    showFeedback(tr().returnDone);
+  }
+
+  function undoRemoval(index) {
+    if (state.operation !== "subtraction" || !state.assembled || state.removed[index] <= 0) return;
+    state.removed[index] -= 1;
+    state.remaining[index] += 1;
+    checkComplete();
+    render();
+    showFeedback(tr().undoDone);
+  }
+
+  function assemblyCount() {
+    return state.operation === "addition" ? total(state.sourceA) + total(state.sourceB) : total(state.remaining);
   }
 
   function moveUnit(origin, index) {
@@ -467,6 +560,7 @@
   }
 
   function checkComplete() {
+    if (!state.assembled) { state.complete = false; return; }
     if (state.operation === "addition") {
       state.complete = state.sourceA.every(count => count === 0) && state.sourceB.every(count => count === 0) &&
         state.result.every(count => count < 10);
@@ -477,6 +571,7 @@
   }
 
   function isPlaceResolved(index) {
+    if (!state.assembled) return false;
     for (let place = 0; place <= index; place += 1) {
       if (state.operation === "addition") {
         if (state.sourceA[place] || state.sourceB[place] || state.result[place] >= 10) return false;
@@ -527,25 +622,24 @@
     const moved = state.operation === "addition" ?
       total(digitArray(state.a, state.size)) + total(digitArray(state.b, state.size)) - total(state.sourceA) - total(state.sourceB) :
       total(state.removed);
-    const planned = state.operation === "addition" ?
-      total(digitArray(state.a, state.size)) + total(digitArray(state.b, state.size)) : total(state.target);
-    el.stepMoveText.textContent = state.operation === "addition" ? tr().moveProgress(moved, planned) : tr().removeProgress(moved, planned);
+    el.stepMoveText.textContent = state.assembled ? tr().buildReady : tr().buildProgress(assemblyCount());
     const carryIndex = firstCarryIndex();
     const borrowIndex = borrowSourceIndex();
-    if (state.operation === "addition" && carryIndex >= 0) {
+    if (!state.assembled) {
+      el.stepExchangeText.textContent = tr().exchangeIdle;
+    } else if (state.operation === "addition" && carryIndex >= 0) {
       el.stepExchangeText.textContent = tr().carryReady(placeName(carryIndex), placeName(carryIndex + 1));
     } else if (state.operation === "subtraction" && borrowIndex >= 0) {
       el.stepExchangeText.textContent = tr().borrowReady(placeName(borrowIndex), placeName(borrowIndex - 1));
     } else {
-      el.stepExchangeText.textContent = state.exchanges ? tr().exchangeCount(state.exchanges) : tr().exchangeIdle;
+      el.stepExchangeText.textContent = state.operation === "addition" ? tr().moveProgress(moved) : tr().removeProgress(moved);
     }
     const resolved = Array.from({ length: state.size }, (_, i) => isPlaceResolved(i)).filter(Boolean).length;
     el.stepFormulaText.textContent = state.complete ? tr().formulaDone : tr().formulaProgress(resolved, state.size);
     document.querySelectorAll(".step-list li").forEach(item => {
       const step = Number(item.dataset.step);
-      item.classList.toggle("active", !state.complete && (step === 1 && moved < planned ||
-        step === 2 && (carryIndex >= 0 || borrowIndex >= 0) || step === 3 && moved === planned && carryIndex < 0 && borrowIndex < 0));
-      item.classList.toggle("done", state.complete || step === 1 && moved === planned || step === 2 && state.exchanges > 0);
+      item.classList.toggle("active", !state.complete && (step === 1 && !state.assembled || step === 2 && state.assembled));
+      item.classList.toggle("done", step === 1 && state.assembled || step === 2 && state.complete || step === 3 && state.complete);
     });
   }
 
@@ -559,9 +653,11 @@
     el.valueA.textContent = state.a;
     el.valueB.textContent = state.b;
     el.resultValue.textContent = state.complete ? answer() : "?";
-    el.subValueA.textContent = state.a;
-    el.removedProgress.textContent = `${total(state.removed)} / ${total(state.target)}`;
+    el.subValueA.textContent = tr().startingFrom(state.a);
+    el.takeAwayTarget.textContent = state.b.toString();
+    el.bank.hidden = state.assembled;
     document.querySelectorAll("[data-place-label]").forEach(label => { label.textContent = shortPlace(Number(label.dataset.placeLabel)); });
+    renderGrid("bank", Array(state.size).fill(1));
     if (addition) {
       renderGrid("sourceA", state.sourceA);
       renderGrid("sourceB", state.sourceB);
@@ -600,12 +696,12 @@
   });
 
   let syncingScroll = false;
-  document.querySelectorAll(".number-panel").forEach(panel => panel.addEventListener("scroll", () => {
+  document.querySelectorAll(".number-panel, .block-bank").forEach(panel => panel.addEventListener("scroll", () => {
     if (syncingScroll) return;
     syncingScroll = true;
     const travel = Math.max(1, panel.scrollWidth - panel.clientWidth);
     const fraction = panel.scrollLeft / travel;
-    document.querySelectorAll(".number-panel").forEach(other => {
+    document.querySelectorAll(".number-panel, .block-bank").forEach(other => {
       if (other !== panel) other.scrollLeft = fraction * Math.max(0, other.scrollWidth - other.clientWidth);
     });
     el.verticalFormula.scrollLeft = fraction * Math.max(0, el.verticalFormula.scrollWidth - el.verticalFormula.clientWidth);

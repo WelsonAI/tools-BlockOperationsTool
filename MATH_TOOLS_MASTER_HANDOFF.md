@@ -194,13 +194,15 @@ The user uses two GitHub owners for different stages.
 - Current state: the user requested a more direct student-operated workflow. The revised version is implemented and locally tested; it must remain a testing version until the user reviews it.
 - Live testing page: `https://welsonai.github.io/tools-BlockOperationsTool/` (HTTP 200 verified on 2026-10-14).
 - The supplied PDF provides the original base-ten block method and examples. The user explicitly removed the fixed numerical range controls; larger user-entered calculations apply the same block exchange method and are not labelled textbook examples.
-- Blocks are ready to drag on page load. Students place blocks into matching columns and drag the yellow group of 10 to the next higher place to carry.
-- In subtraction, students drag a higher block one place lower to split it into 10. Cascading borrowing through zero columns is supported.
+- The block supply is ready on page load, while A, B, and the subtraction starting panel are empty. Students first build the given numbers by dragging reusable blocks into the correct place-value columns.
+- In addition, students then move A and B into the result and drag the yellow group of 10 one place higher to carry. In subtraction, a recycle bin displays only the number to subtract (for example, `要减 28`); students decide which blocks to move into it. There is no `9/9`-style target counter or pre-decomposed subtraction hint.
+- Mistaken blocks can be dragged from the recycle bin back to their original place, even after completion. Students drag a higher block one place lower to split it into 10, including cascading borrowing through zeros.
+- Ones are arranged five per row. Small screens stack place-value columns vertically instead of hiding a column offscreen.
 - The vertical working stays visible on the right and updates as pupils move, carry, or borrow. Guidance steps run top to bottom.
 - Numbers are entered manually without a preset maximum; the tool creates place-value columns dynamically. There is no random question generator.
 - The answer starts as `?` and appears only after the learner completes the block movement.
 - The tool supports smooth drag, tap, keyboard operation, BM, Chinese, and English.
-- Passed regression examples: 28 + 6 = 34, 32 - 9 = 23, 1000 - 1 = 999, and 999 + 1 = 1000; a 20-digit input and mobile layout were also checked.
+- Passed regression examples: 28 + 6 = 34, 32 - 9 = 23, 500 - 28 = 472, 1000 - 1 = 999, and 999 + 1 = 1000; reversible subtraction, a 20-digit input, and mobile layout were also checked.
 - The original BlockMathToolMutiFunction was not modified.
 
 ## Production fixed-year repositories
