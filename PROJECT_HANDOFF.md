@@ -121,10 +121,12 @@ node tests\smoke.mjs
 
 ## Next steps
 
-1. Push the current project to `WelsonAI/tools-BlockOperationsTool` on branch `main`.
-2. Give the user the GitHub repository link and, if GitHub Pages is enabled, the Pages testing link.
+The user has said the current addition/subtraction experience is not yet what they want and will provide detailed changes. Treat the live page as a test draft.
+
+1. The project is pushed to `WelsonAI/tools-BlockOperationsTool` on branch `main`.
+2. The live GitHub Pages testing link is `https://welsonai.github.io/tools-BlockOperationsTool/` (HTTP 200 verified on 2026-10-14).
 3. Let the user test the tool and report changes.
-4. Apply accepted fixes to the WelsonAI testing repository.
+4. Apply accepted fixes locally, test them, and push to the WelsonAI testing repository.
 5. Only after explicit user approval, push/copy the approved version to the repository specified by the user under `production248`.
 
 ## Broader project conventions

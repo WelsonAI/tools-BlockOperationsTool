@@ -191,7 +191,8 @@ The user uses two GitHub owners for different stages.
 - Production repository: not yet created or approved.
 - Purpose: a new standalone place-value block tool containing only addition and subtraction.
 - Curriculum source: `C:\Users\User\Downloads\Makmal edMath.pdf`
-- Current state: implementation and automated tests are complete locally. The next action is to commit and push it to the WelsonAI testing repository.
+- Current state: implementation and automated tests are complete. The project is committed and pushed to the WelsonAI testing repository on branch `main`. The user has said this test version still needs changes to the addition/subtraction experience and will provide the details; do not treat it as approved.
+- Live testing page: `https://welsonai.github.io/tools-BlockOperationsTool/` (HTTP 200 verified on 2026-10-14).
 - Addition scope: within 40, 100, and 1000; without regrouping; 10 ones to 1 ten; 10 tens to 1 hundred.
 - Subtraction scope: within 40 and 100; without regrouping; 1 ten to 10 ones.
 - Three-digit subtraction is deliberately disabled because the supplied PDF does not establish it.
@@ -311,16 +312,16 @@ Do not patch only one generated year folder when the same behavior belongs in sh
 
 ## Immediate continuation instructions
 
-The active work is BlockOperationsTool.
+The active work is user testing and possible refinement of BlockOperationsTool.
 
 1. Read `C:\Users\User\Desktop\BlockOperationsTool\PROJECT_HANDOFF.md` for the detailed implementation and tests.
-2. Initialize a Git repository in `C:\Users\User\Desktop\BlockOperationsTool` if it is not already initialized.
-3. Use local commit identity `WelsonAI <WelsonAI@users.noreply.github.com>` for the WelsonAI testing commit.
-4. Add remote `https://github.com/WelsonAI/tools-BlockOperationsTool.git`.
-5. Commit the source, assets, README, tests, and handoff files. Do not commit temporary Chrome profiles or generated screenshots.
-6. Push branch `main` to WelsonAI.
-7. Verify the remote contents.
-8. Give the user the repository link and explain how to enable or test GitHub Pages.
+2. Open the live testing page at `https://welsonai.github.io/tools-BlockOperationsTool/` and review the user's feedback.
+3. Reproduce any reported issue in the local source before changing it.
+4. Keep every mathematical activity within `C:\Users\User\Downloads\Makmal edMath.pdf` and the user's stated scope of block addition and subtraction.
+5. Implement accepted fixes in the local project, test the interactions, and push the updated `main` branch to `WelsonAI/tools-BlockOperationsTool`.
+6. Verify the remote branch and the live GitHub Pages page after pushing.
+7. Give the user the updated testing link and summarize the changes.
+8. Update the handoff files when behavior or repository state changes.
 9. Do not push this new tool to production248 until the user tests it and explicitly approves production publishing.
 
 ## Suggested first message for a new chat
