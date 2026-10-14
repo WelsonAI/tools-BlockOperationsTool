@@ -1,0 +1,6 @@
+tests/*.png
+tests/chrome-profile/
+tests/chrome-cdp-profile/
+.qa-handoff/
+~$*.docx
+
