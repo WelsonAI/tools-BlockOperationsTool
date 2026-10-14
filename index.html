@@ -41,38 +41,29 @@
         <div class="rule"></div>
 
         <label class="field">
-          <span data-i18n="range">课本范围</span>
-          <select id="rangeSelect">
-            <option value="40" data-i18n="within40">40 以内</option>
-            <option value="100" data-i18n="within100">100 以内</option>
-            <option value="1000" data-i18n="within1000">1000 以内（加法）</option>
-          </select>
-        </label>
-
-        <label class="field">
           <span data-i18n="firstNumber">第一个数</span>
-          <input id="numberA" type="number" inputmode="numeric" min="0" value="28" />
+          <input id="numberA" type="text" inputmode="numeric" autocomplete="off" value="28" />
         </label>
 
         <label class="field">
           <span data-i18n="secondNumber">第二个数</span>
-          <input id="numberB" type="number" inputmode="numeric" min="0" value="6" />
+          <input id="numberB" type="text" inputmode="numeric" autocomplete="off" value="6" />
         </label>
 
         <p id="inputError" class="input-error" role="alert" hidden></p>
 
         <button id="buildBtn" class="primary-button" type="button">
-          <span aria-hidden="true">🧱</span><span data-i18n="build">摆出积木</span>
+          <span aria-hidden="true">🧱</span><span data-i18n="build">更换数字</span>
         </button>
         <button id="resetBtn" class="secondary-button" type="button">
           <span aria-hidden="true">↻</span><span data-i18n="reset">重置工具</span>
         </button>
 
         <div class="curriculum-note">
-          <strong data-i18n="sourceScopeTitle">本工具只做课本里的加减法</strong>
+          <strong data-i18n="sourceScopeTitle">自由操作位值积木</strong>
           <p id="scopeText"></p>
         </div>
-        <div class="manual-note" data-i18n="noRandom">没有随机出题；数字由老师输入。</div>
+        <div class="manual-note" data-i18n="noRandom">数字由你输入，没有随机题目或固定范围。</div>
       </aside>
 
       <section class="learning-card">
@@ -81,98 +72,67 @@
             <div class="eyebrow" data-i18n="handsOn">动手试试！</div>
             <h2 id="activityTitle">积木加法实验室</h2>
           </div>
-          <div id="rangeBadge" class="range-badge">40 以内</div>
+          <div id="rangeBadge" class="range-badge" data-i18n="freeNumbers">自由数字</div>
         </div>
 
         <section class="hero-card">
           <div class="hero-kicker" data-i18n="currentOperation">现在操作</div>
           <div id="equation" class="equation" aria-live="polite">28 + 6 = ?</div>
-          <p id="heroHint">先摆出两个数，再从个位开始。</p>
+          <p id="heroHint">积木已经摆好，直接拖动；需要进位时自己把十个合成一块。</p>
         </section>
 
-        <ol class="step-strip" aria-label="Steps">
-          <li class="active" data-step="1"><span>1</span><b data-i18n="stepBuild">摆出数字</b></li>
-          <li data-step="2"><span>2</span><b data-i18n="stepOperate">拖动与换位</b></li>
-          <li data-step="3"><span>3</span><b data-i18n="stepExplain">查看结果</b></li>
-        </ol>
-
         <section class="lab-panel">
-          <div class="instruction-row">
-            <div class="instruction-number" id="instructionNumber">1</div>
-            <div>
-              <strong id="instructionTitle">先摆出积木</strong>
-              <p id="instructionText">按“摆出积木”开始。</p>
+          <div class="work-surface">
+            <div class="block-workspace">
+              <div id="additionBoard" class="operation-board addition-board">
+                <section class="number-panel panel-a">
+                  <header><span class="group-dot">A</span><strong data-i18n="groupA">第一组</strong><b id="valueA">28</b></header>
+                  <div id="sourceAGrid" class="place-grid"></div>
+                </section>
+                <section class="number-panel panel-b">
+                  <header><span class="group-dot">B</span><strong data-i18n="groupB">第二组</strong><b id="valueB">6</b></header>
+                  <div id="sourceBGrid" class="place-grid"></div>
+                </section>
+                <section class="number-panel result-panel">
+                  <header><span class="group-dot">=</span><strong data-i18n="combineArea">合并区</strong><b id="resultValue">?</b></header>
+                  <div id="resultGrid" class="place-grid"></div>
+                </section>
+              </div>
+
+              <div id="subtractionBoard" class="operation-board subtraction-board" hidden>
+                <section class="number-panel panel-a wide-panel">
+                  <header><span class="group-dot">A</span><strong data-i18n="startAmount">原有积木</strong><b id="subValueA">32</b></header>
+                  <div id="minuendGrid" class="place-grid"></div>
+                </section>
+                <section class="number-panel removed-panel">
+                  <header><span class="group-dot">−</span><strong data-i18n="takeAwayTray">减去区</strong><b id="removedProgress">0 / 9</b></header>
+                  <div id="removedGrid" class="place-grid"></div>
+                </section>
+              </div>
+              <div id="feedback" class="feedback" aria-live="polite"></div>
             </div>
-          </div>
 
-          <div id="additionBoard" class="operation-board addition-board">
-            <section class="number-panel panel-a">
-              <header><span class="group-dot">A</span><strong data-i18n="groupA">第一组</strong><b id="valueA">28</b></header>
-              <div id="sourceAGrid" class="place-grid"></div>
-            </section>
-            <div class="operator-mark" aria-hidden="true">＋</div>
-            <section class="number-panel panel-b">
-              <header><span class="group-dot">B</span><strong data-i18n="groupB">第二组</strong><b id="valueB">6</b></header>
-              <div id="sourceBGrid" class="place-grid"></div>
-            </section>
-            <div class="merge-arrow" aria-hidden="true">↓</div>
-            <section class="number-panel result-panel">
-              <header><span class="group-dot">=</span><strong data-i18n="combineArea">合并区</strong><b id="resultValue">?</b></header>
-              <div id="resultGrid" class="place-grid"></div>
-            </section>
+            <aside class="working-card" aria-label="Vertical working">
+              <div class="eyebrow" data-i18n="workingTitle">同步竖式</div>
+              <div id="verticalFormula" class="vertical-formula" aria-live="polite"></div>
+              <ol class="step-list" aria-label="Steps">
+                <li data-step="1"><span class="step-number">1</span><div><strong data-i18n="stepMoveTitle">自己拖动</strong><p id="stepMoveText"></p></div></li>
+                <li data-step="2"><span class="step-number">2</span><div><strong data-i18n="stepExchangeTitle">自己进位／借位</strong><p id="stepExchangeText"></p></div></li>
+                <li data-step="3"><span class="step-number">3</span><div><strong data-i18n="stepFormulaTitle">从上往下看竖式</strong><p id="stepFormulaText"></p></div></li>
+              </ol>
+            </aside>
           </div>
-
-          <div id="subtractionBoard" class="operation-board subtraction-board" hidden>
-            <section class="number-panel panel-a wide-panel">
-              <header><span class="group-dot">A</span><strong data-i18n="startAmount">原有积木</strong><b id="subValueA">32</b></header>
-              <div id="minuendGrid" class="place-grid"></div>
-            </section>
-            <div class="subtraction-lower">
-              <section class="target-panel">
-                <header><strong data-i18n="takeAwayTarget">需要减去</strong><b id="subValueB">9</b></header>
-                <div id="removeTarget" class="target-grid"></div>
-              </section>
-              <section class="number-panel removed-panel">
-                <header><span class="group-dot">−</span><strong data-i18n="takeAwayTray">减去区</strong><b id="removedProgress">0 / 9</b></header>
-                <div id="removedGrid" class="place-grid"></div>
-              </section>
-            </div>
-          </div>
-
-          <div class="action-bar">
-            <button id="exchangeBtn" class="exchange-button" type="button" hidden></button>
-            <button id="nextBtn" class="primary-button compact" type="button" disabled></button>
-            <button id="formulaBtn" class="secondary-button compact" type="button" disabled>
-              <span aria-hidden="true">▦</span><span data-i18n="showFormula">查看直式</span>
-            </button>
-          </div>
-
-          <div id="feedback" class="feedback" aria-live="polite"></div>
         </section>
 
         <section class="block-key" aria-label="Block values">
           <div><img src="assets/one.png" alt="" /><span data-i18n="oneBlock">1 个位</span></div>
           <div><img src="assets/ten.png" alt="" /><span data-i18n="tenBlock">1 个十位 = 10 个个位</span></div>
           <div><img src="assets/hundred.png" alt="" /><span data-i18n="hundredBlock">1 个百位 = 10 个十位</span></div>
+          <div><img src="assets/thousand.png" alt="" /><span data-i18n="thousandBlock">1 个千位 = 10 个百位</span></div>
         </section>
       </section>
     </main>
 
-    <footer class="footer-steps">
-      <span><b>1</b><span data-i18n="observe">仔细观察</span></span>
-      <span><b>2</b><span data-i18n="move">移动积木</span></span>
-      <span><b>3</b><span data-i18n="explain">说明换位</span></span>
-    </footer>
-  </div>
-
-  <div id="formulaModal" class="modal" hidden aria-hidden="true">
-    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="formulaHeading">
-      <button id="modalClose" class="modal-close" type="button" aria-label="Close">×</button>
-      <div class="eyebrow" data-i18n="afterBlocks">完成积木操作后</div>
-      <h2 id="formulaHeading" data-i18n="formulaTitle">用直式说明</h2>
-      <div id="verticalFormula" class="vertical-formula"></div>
-      <p id="formulaExplanation" class="formula-explanation"></p>
-    </div>
   </div>
 
   <script src="app.js"></script>

@@ -484,6 +484,125 @@ button:not(:disabled):active { transform: translateY(2px); box-shadow: 0 2px 0 r
 .formula-line.operator { border-bottom: 3px solid var(--ink); }
 .formula-explanation { margin: 18px 0 0; padding: 13px; border-radius: 12px; background: #eef8f6; color: var(--teal-dark); font-weight: 900; line-height: 1.5; text-align: center; }
 
+/* The blocks and the working stay visible together. Students drive each exchange. */
+.work-surface {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(285px, 350px);
+  gap: 14px;
+  align-items: start;
+}
+.equation { overflow-wrap: anywhere; }
+.block-workspace { min-width: 0; }
+.addition-board,
+.subtraction-board { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; margin: 0; }
+.number-panel { overflow-x: auto; }
+.result-panel { grid-column: auto; }
+.place-grid {
+  width: 100%;
+  min-height: 112px;
+  grid-template-columns: repeat(var(--place-count), minmax(96px, 1fr));
+}
+.place-column { min-width: 96px; }
+.block-zone { min-height: 94px; padding: 8px 5px; align-content: flex-start; }
+.math-block.block-thousand { width: 65px; height: 65px; }
+.math-block.block-one { width: 44px; height: 44px; }
+.math-block.block-large {
+  display: grid;
+  place-items: center;
+  width: 70px;
+  height: 55px;
+  border: 2px solid #b97829;
+  border-radius: 9px;
+  background: linear-gradient(145deg, #ffe496, #ffa846);
+  color: #503211;
+  font-size: 15px;
+  font-weight: 1000;
+  text-align: center;
+}
+.carry-bundle {
+  flex: 0 0 100%;
+  min-height: 40px;
+  padding: 5px;
+  border: 2px dashed #ae761e;
+  border-radius: 10px;
+  background: #ffdd83;
+  color: #513315;
+  font-size: 12px;
+  font-weight: 1000;
+  cursor: grab;
+  touch-action: none;
+}
+.carry-bundle:hover,
+.carry-bundle:focus-visible { background: #ffc956; outline: 2px solid var(--teal); outline-offset: 2px; }
+.drag-ghost.ghost-bundle { display: grid; place-items: center; border: 2px dashed #ae761e; border-radius: 10px; background: #ffdd83; color: #513315; font-weight: 1000; }
+.working-card {
+  position: sticky;
+  top: 14px;
+  min-width: 0;
+  padding: 15px;
+  border: 2px solid #dfb975;
+  border-radius: 17px;
+  background: #fffaf0;
+}
+.working-card > .eyebrow { margin-bottom: 10px; }
+.working-card .vertical-formula {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  overflow-x: auto;
+  padding: 8px 5px 12px;
+  border: 1px solid #d7e4dc;
+  border-radius: 12px;
+  background: #fff;
+  text-align: center;
+  font: inherit;
+}
+.formula-grid { width: max-content; min-width: 100%; }
+.formula-row {
+  display: grid;
+  grid-template-columns: 28px repeat(var(--formula-places), minmax(48px, 1fr));
+  align-items: center;
+  min-width: max-content;
+}
+.formula-operator { font-size: 21px; font-weight: 1000; }
+.formula-cell { display: grid; place-items: center; min-width: 48px; min-height: 34px; }
+.formula-places .formula-cell { min-height: 27px; color: #7b654b; font-size: 10px; font-weight: 900; white-space: nowrap; }
+.formula-notes .formula-cell { min-height: 24px; color: var(--red); font-size: 11px; font-weight: 1000; white-space: nowrap; }
+.formula-number .formula-cell,
+.formula-answer .formula-cell { font-size: 27px; font-weight: 1000; font-variant-numeric: tabular-nums; }
+.formula-second { border-bottom: 3px solid var(--ink); }
+.formula-answer { color: var(--teal-dark); }
+.step-list { display: grid; gap: 9px; margin: 13px 0 0; padding: 0; list-style: none; }
+.step-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+  padding: 9px;
+  border: 1.5px solid #ead1a1;
+  border-radius: 12px;
+  background: rgba(255,255,255,.78);
+}
+.step-list li.active { border-color: var(--teal); background: #e9f8f2; }
+.step-list li.done .step-number { background: var(--teal); border-color: var(--teal-dark); color: #fff; }
+.step-number {
+  display: grid;
+  place-items: center;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid #99661a;
+  border-radius: 50%;
+  background: #ffcf5e;
+  font-weight: 1000;
+}
+.step-list li > div { min-width: 0; }
+.step-list strong { display: block; font-size: 13px; }
+.step-list p { margin: 4px 0 0; color: #725432; font-size: 12px; font-weight: 700; line-height: 1.4; }
+.block-key { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.block-key > div:nth-child(4) img { width: 52px; height: 52px; }
+
 @media (max-width: 980px) {
   .page-shell { padding: 12px 14px 20px; }
   .tool-layout { grid-template-columns: 1fr; }
@@ -491,6 +610,16 @@ button:not(:disabled):active { transform: translateY(2px); box-shadow: 0 2px 0 r
   .settings-card > .eyebrow, .settings-card > h2, .settings-card > .rule, .settings-card > .input-error, .settings-card > .curriculum-note, .settings-card > .manual-note { grid-column: 1 / -1; }
   .settings-card > .field { margin: 0; }
   .settings-card > .primary-button, .settings-card > .secondary-button { margin: 0; }
+  .work-surface { grid-template-columns: minmax(0, 1fr) minmax(260px, 330px); }
+}
+
+@media (max-width: 760px) {
+  .tool-layout { display: flex; flex-direction: column; }
+  .learning-card { order: 0; width: 100%; }
+  .settings-card { order: 1; width: 100%; }
+  .work-surface { grid-template-columns: 1fr; }
+  .working-card { position: static; }
+  .block-key { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 720px) {
@@ -508,12 +637,12 @@ button:not(:disabled):active { transform: translateY(2px); box-shadow: 0 2px 0 r
   .step-strip li { min-height: 44px; padding: 5px; font-size: 11px; }
   .step-strip li span { width: 24px; height: 24px; }
   .lab-panel { padding: 10px; }
-  .addition-board { grid-template-columns: 1fr; }
+  .addition-board { grid-template-columns: minmax(0, 1fr); }
   .operator-mark { min-height: 30px; }
-  .merge-arrow, .result-panel { grid-column: 1; }
-  .place-grid { min-height: 150px; }
+  .result-panel { grid-column: 1; }
+  .place-grid { min-height: 112px; }
   .subtraction-lower { grid-template-columns: 1fr; }
-  .block-key { grid-template-columns: 1fr; }
+  .block-key { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .block-key > div { min-height: 58px; }
   .footer-steps { gap: 5px; }
   .footer-steps > span { gap: 5px; font-size: 10px; }
@@ -529,7 +658,7 @@ button:not(:disabled):active { transform: translateY(2px); box-shadow: 0 2px 0 r
   .range-badge { font-size: 12px; }
   .action-bar { display: grid; grid-template-columns: 1fr; }
   .action-bar .exchange-button, .compact { width: 100%; min-width: 0; }
-  .place-grid { min-height: 142px; }
+  .place-grid { min-height: 112px; }
   .math-block.block-hundred { width: 54px; height: 54px; }
   .footer-steps > span { min-height: 44px; }
   .footer-steps b { width: 23px; height: 23px; }

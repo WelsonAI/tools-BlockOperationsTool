@@ -191,15 +191,16 @@ The user uses two GitHub owners for different stages.
 - Production repository: not yet created or approved.
 - Purpose: a new standalone place-value block tool containing only addition and subtraction.
 - Curriculum source: `C:\Users\User\Downloads\Makmal edMath.pdf`
-- Current state: implementation and automated tests are complete. The project is committed and pushed to the WelsonAI testing repository on branch `main`. The user has said this test version still needs changes to the addition/subtraction experience and will provide the details; do not treat it as approved.
+- Current state: the user requested a more direct student-operated workflow. The revised version is implemented and locally tested; it must remain a testing version until the user reviews it.
 - Live testing page: `https://welsonai.github.io/tools-BlockOperationsTool/` (HTTP 200 verified on 2026-10-14).
-- Addition scope: within 40, 100, and 1000; without regrouping; 10 ones to 1 ten; 10 tens to 1 hundred.
-- Subtraction scope: within 40 and 100; without regrouping; 1 ten to 10 ones.
-- Three-digit subtraction is deliberately disabled because the supplied PDF does not establish it.
-- Teacher enters the two numbers manually. There is no random question generator.
+- The supplied PDF provides the original base-ten block method and examples. The user explicitly removed the fixed numerical range controls; larger user-entered calculations apply the same block exchange method and are not labelled textbook examples.
+- Blocks are ready to drag on page load. Students place blocks into matching columns and drag the yellow group of 10 to the next higher place to carry.
+- In subtraction, students drag a higher block one place lower to split it into 10. Cascading borrowing through zero columns is supported.
+- The vertical working stays visible on the right and updates as pupils move, carry, or borrow. Guidance steps run top to bottom.
+- Numbers are entered manually without a preset maximum; the tool creates place-value columns dynamically. There is no random question generator.
 - The answer starts as `?` and appears only after the learner completes the block movement.
-- The tool supports smooth drag, tap, keyboard operation, BM, Chinese, English, and a vertical-form explanation after completion.
-- Passed regression examples: 28 + 6 = 34, 32 - 9 = 23, and 182 + 193 = 375.
+- The tool supports smooth drag, tap, keyboard operation, BM, Chinese, and English.
+- Passed regression examples: 28 + 6 = 34, 32 - 9 = 23, 1000 - 1 = 999, and 999 + 1 = 1000; a 20-digit input and mobile layout were also checked.
 - The original BlockMathToolMutiFunction was not modified.
 
 ## Production fixed-year repositories
@@ -312,7 +313,7 @@ Do not patch only one generated year folder when the same behavior belongs in sh
 
 ## Immediate continuation instructions
 
-The active work is user testing and possible refinement of BlockOperationsTool.
+The active work is reviewing the revised BlockOperationsTool with the user and making any further requested refinements.
 
 1. Read `C:\Users\User\Desktop\BlockOperationsTool\PROJECT_HANDOFF.md` for the detailed implementation and tests.
 2. Open the live testing page at `https://welsonai.github.io/tools-BlockOperationsTool/` and review the user's feedback.

@@ -1,818 +1,616 @@
 (() => {
   "use strict";
 
-  const places = ["one", "ten", "hundred"];
-  const placeValues = { one: 1, ten: 10, hundred: 100 };
-  const blockImages = { one: "assets/one.png", ten: "assets/ten.png", hundred: "assets/hundred.png" };
-
-  const translations = {
+  const copy = {
     zh: {
-      title: "一起来探索积木加减！",
-      subtitle: "用位值积木看见加法、减法与换位。",
-      addition: "加法",
-      subtraction: "减法",
-      teacherSetup: "老师设置",
-      manualNumbers: "手动输入数字",
-      range: "课本范围",
-      within40: "40 以内",
-      within100: "100 以内",
-      within1000: "1000 以内（加法）",
-      firstNumber: "第一个数",
-      secondNumber: "第二个数",
-      build: "摆出积木",
-      reset: "重置工具",
-      sourceScopeTitle: "本工具只做课本里的加减法",
-      noRandom: "没有随机出题；数字由老师输入。",
-      handsOn: "动手试试！",
-      currentOperation: "现在操作",
-      stepBuild: "摆出数字",
-      stepOperate: "拖动与换位",
-      stepExplain: "查看结果",
-      groupA: "第一组",
-      groupB: "第二组",
-      combineArea: "合并区",
-      startAmount: "原有积木",
-      takeAwayTarget: "需要减去",
-      takeAwayTray: "减去区",
-      showFormula: "查看直式",
-      oneBlock: "1 个位",
-      tenBlock: "1 个十位 = 10 个个位",
-      hundredBlock: "1 个百位 = 10 个十位",
-      observe: "仔细观察",
-      move: "移动积木",
-      explain: "说明换位",
-      afterBlocks: "完成积木操作后",
-      formulaTitle: "用直式说明",
-      ones: "个位",
-      tens: "十位",
-      hundreds: "百位",
-      additionTitle: "积木加法实验室",
-      subtractionTitle: "积木减法实验室",
-      scopeAddition: "加法依照课本做到 40、100 和 1000 以内；操作包括不换位、个位进位及十位进位。",
-      scopeSubtraction: "减法依照课本做到 40 和 100 以内；操作包括不换位及把 1 个十位拆成 10 个个位。",
-      heroStartAdd: "把两组积木拖进合并区，从个位开始。",
-      heroStartSub: "从原有积木中拖走指定数量，从个位开始。",
-      readyTitle: "先摆出积木",
-      readyText: "按“摆出积木”开始。",
-      moveAddTitle: place => `先合并${place}`,
-      moveAddText: place => `把两组的${place}积木拖到合并区。也可以轻触积木。`,
-      moveSubTitle: place => `先减去${place}`,
-      moveSubText: (count, place) => count ? `把 ${count} 个${place}积木拖到减去区。也可以轻触积木。` : `这一步不需要减去${place}。`,
-      exchangeAdd: (from, to) => `演示：10 个${from} → 1 个${to}`,
-      exchangeSub: (from, to) => `演示：1 个${from} → 10 个${to}`,
-      exchangeAddDone: (from, to) => `10 个${from}已经整合成 1 个${to}。`,
-      exchangeSubDone: (from, to) => `1 个${from}已经拆成 10 个${to}。`,
-      nextPlace: place => `继续${place}`,
-      finish: "完成运算",
-      dragHintAdd: place => `当前只移动${place}积木。`,
-      dragHintSub: (remaining, place) => `还要减去 ${remaining} 个${place}。`,
-      needExchange: "数量不够，先进行换位演示。",
-      completeAdd: answer => `完成！合并后的积木表示 ${answer}。`,
-      completeSub: answer => `完成！剩下的积木表示 ${answer}。`,
-      formulaAdd: "从个位开始相加；每满 10 个就换成左边 1 个较大的位值积木。",
-      formulaSub: "从个位开始相减；不够减时，把左边 1 个较大的位值积木拆成 10 个。",
-      targetRow: (count, place) => `${place}：减去 ${count} 个`,
-      invalidNumber: "请输入完整的非负整数。",
-      invalidOrder: "减法的第一个数必须大于或等于第二个数。",
-      invalidRange: limit => `数字或答案必须在这个课本范围内（不超过 ${limit}）。`,
-      subtraction1000: "这份资料没有展示三位数减法，所以减法只开放到 100 以内。",
-      wrongDrop: "请把积木放到相同位值的区域。"
+      title: "一起来探索积木加减！", subtitle: "自己移动位值积木，看见进位和借位。",
+      addition: "加法", subtraction: "减法", teacherSetup: "数字设置", manualNumbers: "自己输入数字",
+      firstNumber: "第一个数", secondNumber: "第二个数", build: "更换数字", reset: "重置工具",
+      sourceScopeTitle: "自由操作位值积木", noRandom: "数字由你输入，没有随机题目或固定范围。",
+      handsOn: "动手试试！", currentOperation: "现在操作", freeNumbers: "自由数字",
+      groupA: "第一组", groupB: "第二组", combineArea: "合并区", startAmount: "原有积木",
+      takeAwayTray: "减去区", workingTitle: "同步竖式", stepMoveTitle: "自己拖动",
+      stepExchangeTitle: "自己进位／借位", stepFormulaTitle: "从上往下看竖式",
+      oneBlock: "1 个位", tenBlock: "1 个十位 = 10 个个位",
+      hundredBlock: "1 个百位 = 10 个十位", thousandBlock: "1 个千位 = 10 个百位",
+      placeNames: ["个位", "十位", "百位", "千位"], higherPlace: power => `10^${power} 位`,
+      additionTitle: "积木加法实验室", subtractionTitle: "积木减法实验室",
+      scopeAddition: "输入你要演示的数字；学生自己拖动积木，并把每 10 个同位积木进位。",
+      scopeSubtraction: "输入你要演示的数字；学生自己拖走积木，不够时把高一位拆成 10 个。",
+      heroAdd: "积木已摆好。把两组拖入合并区；满 10 个时拖动黄色组合牌进位。",
+      heroSub: "积木已摆好。拖到减去区；不够时把高一位积木拖到低一位借位。",
+      readyAdd: "拖动两组积木到相同位值的合并区。",
+      readySub: "拖走需要减去的积木；不够就自己从高一位借。",
+      moveProgress: (done, total) => `已移动 ${done} / ${total} 块。`,
+      removeProgress: (done, total) => `已减去 ${done} / ${total} 块。`,
+      exchangeIdle: "需要时，由你自己拖动积木换位。",
+      carryReady: (from, to) => `把 10 个${from}拖到${to}，合成 1 块。`,
+      borrowReady: (from, to) => `把 1 个${from}拖到${to}，拆成 10 块。`,
+      exchangeCount: count => `你已完成 ${count} 次进位／借位。`,
+      formulaProgress: (done, total) => `右边每一位会随着操作填写：${done} / ${total} 位。`,
+      formulaDone: "竖式已完成；结果由你摆出的积木得到。",
+      carryToken: (from, to) => `拖这 10 个${from}到${to}`,
+      carryDone: (from, to) => `你把 10 个${from}合成了 1 个${to}。`,
+      borrowDone: (from, to) => `你把 1 个${from}拆成了 10 个${to}。`,
+      moveDone: "积木已放好，竖式正在更新。", complete: value => `完成！结果是 ${value}。`,
+      invalidNumber: "请输入完整的非负整数（只用 0–9）。",
+      invalidOrder: "减法的第一个数要大于或等于第二个数。",
+      wrongDrop: "请把积木放到对应的位值栏；借位要往低一位拖。",
+      unavailable: "这一步还不需要这样换位。"
     },
     en: {
-      title: "Explore Addition and Subtraction with Blocks!",
-      subtitle: "See addition, subtraction and regrouping with place-value blocks.",
-      addition: "Addition",
-      subtraction: "Subtraction",
-      teacherSetup: "Teacher settings",
-      manualNumbers: "Enter numbers manually",
-      range: "Textbook range",
-      within40: "Within 40",
-      within100: "Within 100",
-      within1000: "Within 1000 (addition)",
-      firstNumber: "First number",
-      secondNumber: "Second number",
-      build: "Build with blocks",
-      reset: "Reset tool",
-      sourceScopeTitle: "This tool covers textbook addition and subtraction only",
-      noRandom: "No random questions; the teacher enters the numbers.",
-      handsOn: "Try it!",
-      currentOperation: "Current operation",
-      stepBuild: "Build the numbers",
-      stepOperate: "Move and regroup",
-      stepExplain: "See the result",
-      groupA: "Group A",
-      groupB: "Group B",
-      combineArea: "Combine area",
-      startAmount: "Starting blocks",
-      takeAwayTarget: "Take away",
-      takeAwayTray: "Taken-away area",
-      showFormula: "Show vertical form",
-      oneBlock: "1 one",
-      tenBlock: "1 ten = 10 ones",
-      hundredBlock: "1 hundred = 10 tens",
-      observe: "Observe",
-      move: "Move the blocks",
-      explain: "Explain regrouping",
-      afterBlocks: "After completing the block operation",
-      formulaTitle: "Explain with vertical form",
-      ones: "ones",
-      tens: "tens",
-      hundreds: "hundreds",
-      additionTitle: "Block Addition Lab",
-      subtractionTitle: "Block Subtraction Lab",
-      scopeAddition: "The textbook covers addition within 40, 100 and 1000, including no regrouping, regrouping ones and regrouping tens.",
-      scopeSubtraction: "The textbook covers subtraction within 40 and 100, including no regrouping and changing 1 ten into 10 ones.",
-      heroStartAdd: "Move both groups into the combine area, starting with the ones.",
-      heroStartSub: "Move the required blocks out of the starting amount, beginning with the ones.",
-      readyTitle: "Build the blocks first",
-      readyText: "Press Build with blocks to begin.",
-      moveAddTitle: place => `Combine the ${place} first`,
-      moveAddText: place => `Drag the ${place} blocks from both groups into the combine area. You can also tap a block.`,
-      moveSubTitle: place => `Subtract the ${place} first`,
-      moveSubText: (count, place) => count ? `Drag ${count} ${place} blocks to the taken-away area. You can also tap a block.` : `No ${place} blocks need to be taken away in this step.`,
-      exchangeAdd: (from, to) => `Demo: 10 ${from} → 1 ${to}`,
-      exchangeSub: (from, to) => `Demo: 1 ${from} → 10 ${to}`,
-      exchangeAddDone: (from, to) => `10 ${from} have been combined into 1 ${to}.`,
-      exchangeSubDone: (from, to) => `1 ${from} has been split into 10 ${to}.`,
-      nextPlace: place => `Continue to ${place}`,
-      finish: "Complete operation",
-      dragHintAdd: place => `Move only the ${place} blocks now.`,
-      dragHintSub: (remaining, place) => `${remaining} more ${place} blocks must be taken away.`,
-      needExchange: "There are not enough blocks. Run the regrouping demonstration first.",
-      completeAdd: answer => `Complete! The combined blocks show ${answer}.`,
-      completeSub: answer => `Complete! The remaining blocks show ${answer}.`,
-      formulaAdd: "Add from the ones. Every group of 10 is changed into 1 block of the next place value.",
-      formulaSub: "Subtract from the ones. When there are not enough blocks, split 1 block from the next place into 10.",
-      targetRow: (count, place) => `${place}: take away ${count}`,
-      invalidNumber: "Enter complete non-negative whole numbers.",
-      invalidOrder: "For subtraction, the first number must be at least the second number.",
-      invalidRange: limit => `The numbers and answer must stay in this textbook range (maximum ${limit}).`,
-      subtraction1000: "The supplied material does not show three-digit subtraction, so subtraction stops at within 100.",
-      wrongDrop: "Drop the block into the matching place-value area."
+      title: "Explore Addition and Subtraction with Blocks!", subtitle: "Move place-value blocks yourself to see carrying and borrowing.",
+      addition: "Addition", subtraction: "Subtraction", teacherSetup: "Number setup", manualNumbers: "Enter your own numbers",
+      firstNumber: "First number", secondNumber: "Second number", build: "Change numbers", reset: "Reset tool",
+      sourceScopeTitle: "Explore place-value blocks freely", noRandom: "You choose the numbers. There are no random questions or preset ranges.",
+      handsOn: "Try it!", currentOperation: "Current operation", freeNumbers: "Open numbers",
+      groupA: "First group", groupB: "Second group", combineArea: "Combine area", startAmount: "Starting blocks",
+      takeAwayTray: "Taken-away area", workingTitle: "Live vertical working", stepMoveTitle: "Drag the blocks",
+      stepExchangeTitle: "Carry or borrow yourself", stepFormulaTitle: "Read the working top to bottom",
+      oneBlock: "1 one", tenBlock: "1 ten = 10 ones", hundredBlock: "1 hundred = 10 tens",
+      thousandBlock: "1 thousand = 10 hundreds", placeNames: ["ones", "tens", "hundreds", "thousands"],
+      higherPlace: power => `10^${power} place`, additionTitle: "Block Addition Lab", subtractionTitle: "Block Subtraction Lab",
+      scopeAddition: "Enter numbers to demonstrate. Pupils move the blocks and carry each group of 10 themselves.",
+      scopeSubtraction: "Enter numbers to demonstrate. Pupils take blocks away and split a higher block when needed.",
+      heroAdd: "The blocks are ready. Drag both groups into the result; drag the yellow bundle to carry 10.",
+      heroSub: "The blocks are ready. Drag blocks away; if there are too few, drag a higher block one place lower.",
+      readyAdd: "Drag both groups into the matching place-value columns.",
+      readySub: "Take away the required blocks. Borrow from the next place when needed.",
+      moveProgress: (done, total) => `${done} / ${total} blocks moved.`,
+      removeProgress: (done, total) => `${done} / ${total} blocks taken away.`,
+      exchangeIdle: "When needed, drag the blocks to regroup them yourself.",
+      carryReady: (from, to) => `Drag 10 ${from} to ${to} to make one block.`,
+      borrowReady: (from, to) => `Drag one ${from} to ${to} to split it into 10.`,
+      exchangeCount: count => `You have regrouped ${count} time${count === 1 ? "" : "s"}.`,
+      formulaProgress: (done, total) => `The working fills as you move blocks: ${done} / ${total} places.`,
+      formulaDone: "The vertical working is complete and matches your blocks.",
+      carryToken: (from, to) => `Drag these 10 ${from} to ${to}`,
+      carryDone: (from, to) => `You made 1 ${to} from 10 ${from}.`,
+      borrowDone: (from, to) => `You split 1 ${from} into 10 ${to}.`,
+      moveDone: "Block placed. The working has updated.", complete: value => `Complete! The result is ${value}.`,
+      invalidNumber: "Enter complete non-negative whole numbers using digits 0–9.",
+      invalidOrder: "The first number must be at least the second for subtraction.",
+      wrongDrop: "Drop into the matching place. Borrow by moving a block one place lower.",
+      unavailable: "That exchange is not needed yet."
     },
     bm: {
-      title: "Mari Teroka Tambah dan Tolak dengan Blok!",
-      subtitle: "Lihat operasi tambah, tolak dan pengumpulan semula dengan blok nilai tempat.",
-      addition: "Tambah",
-      subtraction: "Tolak",
-      teacherSetup: "Tetapan guru",
-      manualNumbers: "Masukkan nombor sendiri",
-      range: "Julat buku teks",
-      within40: "Dalam lingkungan 40",
-      within100: "Dalam lingkungan 100",
-      within1000: "Dalam lingkungan 1000 (tambah)",
-      firstNumber: "Nombor pertama",
-      secondNumber: "Nombor kedua",
-      build: "Bina dengan blok",
-      reset: "Set semula alat",
-      sourceScopeTitle: "Alat ini hanya untuk tambah dan tolak dalam buku teks",
-      noRandom: "Tiada soalan rawak; guru memasukkan nombor.",
-      handsOn: "Mari cuba!",
-      currentOperation: "Operasi sekarang",
-      stepBuild: "Bina nombor",
-      stepOperate: "Gerak dan kumpul semula",
-      stepExplain: "Lihat hasil",
-      groupA: "Kumpulan A",
-      groupB: "Kumpulan B",
-      combineArea: "Ruang gabung",
-      startAmount: "Blok asal",
-      takeAwayTarget: "Perlu ditolak",
-      takeAwayTray: "Ruang ditolak",
-      showFormula: "Lihat bentuk lazim",
-      oneBlock: "1 sa",
-      tenBlock: "1 puluh = 10 sa",
-      hundredBlock: "1 ratus = 10 puluh",
-      observe: "Perhati",
-      move: "Gerakkan blok",
-      explain: "Terangkan kumpul semula",
-      afterBlocks: "Selepas operasi blok selesai",
-      formulaTitle: "Terangkan dengan bentuk lazim",
-      ones: "sa",
-      tens: "puluh",
-      hundreds: "ratus",
-      additionTitle: "Makmal Tambah Blok",
-      subtractionTitle: "Makmal Tolak Blok",
-      scopeAddition: "Buku teks menunjukkan tambah dalam lingkungan 40, 100 dan 1000, termasuk tanpa dan dengan pengumpulan semula.",
-      scopeSubtraction: "Buku teks menunjukkan tolak dalam lingkungan 40 dan 100, termasuk menukar 1 puluh kepada 10 sa.",
-      heroStartAdd: "Gerakkan kedua-dua kumpulan ke ruang gabung, bermula dengan sa.",
-      heroStartSub: "Gerakkan blok yang perlu ditolak, bermula dengan sa.",
-      readyTitle: "Bina blok dahulu",
-      readyText: "Tekan Bina dengan blok untuk bermula.",
-      moveAddTitle: place => `Gabungkan ${place} dahulu`,
-      moveAddText: place => `Seret blok ${place} daripada kedua-dua kumpulan ke ruang gabung. Blok juga boleh disentuh.`,
-      moveSubTitle: place => `Tolak ${place} dahulu`,
-      moveSubText: (count, place) => count ? `Seret ${count} blok ${place} ke ruang ditolak. Blok juga boleh disentuh.` : `Tiada blok ${place} perlu ditolak pada langkah ini.`,
-      exchangeAdd: (from, to) => `Demo: 10 ${from} → 1 ${to}`,
-      exchangeSub: (from, to) => `Demo: 1 ${from} → 10 ${to}`,
-      exchangeAddDone: (from, to) => `10 ${from} telah digabung menjadi 1 ${to}.`,
-      exchangeSubDone: (from, to) => `1 ${from} telah dipecahkan menjadi 10 ${to}.`,
-      nextPlace: place => `Teruskan ke ${place}`,
-      finish: "Selesaikan operasi",
-      dragHintAdd: place => `Gerakkan blok ${place} sahaja sekarang.`,
-      dragHintSub: (remaining, place) => `${remaining} lagi blok ${place} perlu ditolak.`,
-      needExchange: "Blok tidak mencukupi. Jalankan demonstrasi pengumpulan semula dahulu.",
-      completeAdd: answer => `Selesai! Blok yang digabung menunjukkan ${answer}.`,
-      completeSub: answer => `Selesai! Blok yang tinggal menunjukkan ${answer}.`,
-      formulaAdd: "Tambah bermula dari sa. Setiap 10 blok ditukar kepada 1 blok nilai tempat di sebelah kiri.",
-      formulaSub: "Tolak bermula dari sa. Jika blok tidak cukup, pecahkan 1 blok di sebelah kiri menjadi 10.",
-      targetRow: (count, place) => `${place}: tolak ${count}`,
-      invalidNumber: "Masukkan nombor bulat bukan negatif yang lengkap.",
-      invalidOrder: "Untuk tolak, nombor pertama mesti sama atau lebih besar daripada nombor kedua.",
-      invalidRange: limit => `Nombor dan jawapan mesti dalam julat buku teks ini (maksimum ${limit}).`,
-      subtraction1000: "Bahan ini tidak menunjukkan tolak tiga digit, jadi tolak hanya sehingga lingkungan 100.",
-      wrongDrop: "Letakkan blok dalam ruang nilai tempat yang sepadan."
+      title: "Mari Teroka Tambah dan Tolak dengan Blok!", subtitle: "Gerakkan blok nilai tempat sendiri untuk melihat pengumpulan semula.",
+      addition: "Tambah", subtraction: "Tolak", teacherSetup: "Tetapan nombor", manualNumbers: "Masukkan nombor sendiri",
+      firstNumber: "Nombor pertama", secondNumber: "Nombor kedua", build: "Tukar nombor", reset: "Set semula alat",
+      sourceScopeTitle: "Teroka blok nilai tempat dengan bebas", noRandom: "Anda pilih nombor. Tiada soalan rawak atau julat tetap.",
+      handsOn: "Mari cuba!", currentOperation: "Operasi sekarang", freeNumbers: "Nombor bebas",
+      groupA: "Kumpulan pertama", groupB: "Kumpulan kedua", combineArea: "Ruang gabung", startAmount: "Blok asal",
+      takeAwayTray: "Ruang ditolak", workingTitle: "Bentuk lazim langsung", stepMoveTitle: "Seret blok sendiri",
+      stepExchangeTitle: "Kumpul atau pinjam sendiri", stepFormulaTitle: "Baca dari atas ke bawah",
+      oneBlock: "1 sa", tenBlock: "1 puluh = 10 sa", hundredBlock: "1 ratus = 10 puluh",
+      thousandBlock: "1 ribu = 10 ratus", placeNames: ["sa", "puluh", "ratus", "ribu"],
+      higherPlace: power => `nilai 10^${power}`, additionTitle: "Makmal Tambah Blok", subtractionTitle: "Makmal Tolak Blok",
+      scopeAddition: "Masukkan nombor sendiri. Murid menggerakkan blok dan mengumpul setiap 10 blok sendiri.",
+      scopeSubtraction: "Masukkan nombor sendiri. Murid menolak blok dan memecahkan blok nilai lebih tinggi apabila perlu.",
+      heroAdd: "Blok sudah tersedia. Seret kedua-dua kumpulan ke ruang gabung; seret ikatan kuning untuk mengumpul 10.",
+      heroSub: "Blok sudah tersedia. Seret blok ke ruang ditolak; jika tidak cukup, seret blok lebih tinggi satu tempat ke kanan.",
+      readyAdd: "Seret kedua-dua kumpulan ke lajur nilai tempat yang sepadan.",
+      readySub: "Keluarkan blok yang perlu ditolak. Pinjam dari tempat lebih tinggi apabila perlu.",
+      moveProgress: (done, total) => `${done} / ${total} blok telah dipindahkan.`,
+      removeProgress: (done, total) => `${done} / ${total} blok telah ditolak.`,
+      exchangeIdle: "Apabila perlu, seret blok untuk mengumpul semula sendiri.",
+      carryReady: (from, to) => `Seret 10 ${from} ke ${to} untuk membuat satu blok.`,
+      borrowReady: (from, to) => `Seret satu ${from} ke ${to} untuk memecahkannya menjadi 10.`,
+      exchangeCount: count => `Anda sudah mengumpul semula ${count} kali.`,
+      formulaProgress: (done, total) => `Bentuk lazim terisi semasa blok digerakkan: ${done} / ${total} tempat.`,
+      formulaDone: "Bentuk lazim lengkap dan sepadan dengan blok anda.",
+      carryToken: (from, to) => `Seret 10 ${from} ini ke ${to}`,
+      carryDone: (from, to) => `Anda membina 1 ${to} daripada 10 ${from}.`,
+      borrowDone: (from, to) => `Anda memecahkan 1 ${from} kepada 10 ${to}.`,
+      moveDone: "Blok sudah diletakkan. Bentuk lazim dikemas kini.", complete: value => `Selesai! Hasilnya ${value}.`,
+      invalidNumber: "Masukkan nombor bulat bukan negatif dengan digit 0–9 sahaja.",
+      invalidOrder: "Nombor pertama mesti sekurang-kurangnya sama dengan nombor kedua untuk tolak.",
+      wrongDrop: "Letakkan pada nilai tempat yang sepadan. Pinjam dengan menggerakkan blok satu tempat ke kanan.",
+      unavailable: "Pengumpulan semula itu belum diperlukan."
     }
   };
 
-  const elements = {
-    rangeSelect: document.getElementById("rangeSelect"),
-    numberA: document.getElementById("numberA"),
-    numberB: document.getElementById("numberB"),
-    inputError: document.getElementById("inputError"),
-    buildBtn: document.getElementById("buildBtn"),
-    resetBtn: document.getElementById("resetBtn"),
-    scopeText: document.getElementById("scopeText"),
-    activityTitle: document.getElementById("activityTitle"),
-    rangeBadge: document.getElementById("rangeBadge"),
-    equation: document.getElementById("equation"),
-    heroHint: document.getElementById("heroHint"),
-    instructionNumber: document.getElementById("instructionNumber"),
-    instructionTitle: document.getElementById("instructionTitle"),
-    instructionText: document.getElementById("instructionText"),
-    additionBoard: document.getElementById("additionBoard"),
-    subtractionBoard: document.getElementById("subtractionBoard"),
-    sourceAGrid: document.getElementById("sourceAGrid"),
-    sourceBGrid: document.getElementById("sourceBGrid"),
-    resultGrid: document.getElementById("resultGrid"),
-    minuendGrid: document.getElementById("minuendGrid"),
-    removedGrid: document.getElementById("removedGrid"),
-    removeTarget: document.getElementById("removeTarget"),
-    valueA: document.getElementById("valueA"),
-    valueB: document.getElementById("valueB"),
-    resultValue: document.getElementById("resultValue"),
-    subValueA: document.getElementById("subValueA"),
-    subValueB: document.getElementById("subValueB"),
-    removedProgress: document.getElementById("removedProgress"),
-    exchangeBtn: document.getElementById("exchangeBtn"),
-    nextBtn: document.getElementById("nextBtn"),
-    formulaBtn: document.getElementById("formulaBtn"),
-    feedback: document.getElementById("feedback"),
-    formulaModal: document.getElementById("formulaModal"),
-    modalClose: document.getElementById("modalClose"),
-    verticalFormula: document.getElementById("verticalFormula"),
-    formulaExplanation: document.getElementById("formulaExplanation")
+  const el = {
+    numberA: document.getElementById("numberA"), numberB: document.getElementById("numberB"),
+    inputError: document.getElementById("inputError"), buildBtn: document.getElementById("buildBtn"),
+    resetBtn: document.getElementById("resetBtn"), scopeText: document.getElementById("scopeText"),
+    activityTitle: document.getElementById("activityTitle"), equation: document.getElementById("equation"),
+    heroHint: document.getElementById("heroHint"), additionBoard: document.getElementById("additionBoard"),
+    subtractionBoard: document.getElementById("subtractionBoard"), sourceAGrid: document.getElementById("sourceAGrid"),
+    sourceBGrid: document.getElementById("sourceBGrid"), resultGrid: document.getElementById("resultGrid"),
+    minuendGrid: document.getElementById("minuendGrid"), removedGrid: document.getElementById("removedGrid"),
+    valueA: document.getElementById("valueA"), valueB: document.getElementById("valueB"),
+    resultValue: document.getElementById("resultValue"), subValueA: document.getElementById("subValueA"),
+    removedProgress: document.getElementById("removedProgress"), feedback: document.getElementById("feedback"),
+    verticalFormula: document.getElementById("verticalFormula"), stepMoveText: document.getElementById("stepMoveText"),
+    stepExchangeText: document.getElementById("stepExchangeText"), stepFormulaText: document.getElementById("stepFormulaText")
   };
 
   const state = {
-    lang: "zh",
-    operation: "addition",
-    range: 40,
-    a: 28,
-    b: 6,
-    built: false,
-    complete: false,
-    busy: false,
-    activePlaces: ["one", "ten"],
-    placeIndex: 0,
-    resultCounts: { one: 0, ten: 0, hundred: 0 },
-    remainingCounts: { one: 0, ten: 0, hundred: 0 },
-    removedCounts: { one: 0, ten: 0, hundred: 0 },
-    targetCounts: { one: 0, ten: 0, hundred: 0 },
-    exchangeLog: []
+    lang: "zh", operation: "addition", a: 28n, b: 6n, size: 2,
+    built: false, complete: false, busy: false,
+    sourceA: [], sourceB: [], result: [], remaining: [], removed: [], target: [],
+    carryInto: [], borrowFrom: [], borrowInto: [], exchanges: 0
   };
 
-  const tr = () => translations[state.lang];
-  const placeLabel = place => ({ one: tr().ones, ten: tr().tens, hundred: tr().hundreds })[place];
-  const symbol = () => state.operation === "addition" ? "+" : "−";
+  const tr = () => copy[state.lang];
+  const sign = () => state.operation === "addition" ? "+" : "−";
   const answer = () => state.operation === "addition" ? state.a + state.b : state.a - state.b;
-  const activePlace = () => state.activePlaces[state.placeIndex];
-  const nextPlace = place => places[places.indexOf(place) + 1] || null;
+  const placeName = index => tr().placeNames[index] || tr().higherPlace(index);
+  const shortPlace = index => index < 4 ? placeName(index) : `10^${index}`;
+  const digitArray = (value, size) => Array.from({ length: size }, (_, index) => Number(value / 10n ** BigInt(index) % 10n));
+  const total = values => values.reduce((sum, value) => sum + value, 0);
+  const zeroes = () => Array(state.size).fill(0);
 
-  function digitCounts(number) {
-    return {
-      one: number % 10,
-      ten: Math.floor(number / 10) % 10,
-      hundred: Math.floor(number / 100) % 10
-    };
-  }
-
-  function rangeLimit() {
-    if (state.range === 40) return 40;
-    return state.range - 1;
-  }
-
-  function applyLanguage(lang) {
-    state.lang = lang;
-    document.documentElement.lang = lang === "zh" ? "zh-CN" : lang === "bm" ? "ms" : "en";
-    document.querySelectorAll("[data-lang]").forEach(button => button.classList.toggle("active", button.dataset.lang === lang));
-    document.querySelectorAll("[data-i18n]").forEach(element => {
-      const value = tr()[element.dataset.i18n];
-      if (typeof value === "string") element.textContent = value;
+  function applyLanguage(language) {
+    state.lang = language;
+    document.documentElement.lang = language === "zh" ? "zh-CN" : language === "bm" ? "ms" : "en";
+    document.querySelectorAll("[data-lang]").forEach(button => button.classList.toggle("active", button.dataset.lang === language));
+    document.querySelectorAll("[data-i18n]").forEach(node => {
+      const value = tr()[node.dataset.i18n];
+      if (typeof value === "string") node.textContent = value;
     });
-    updateRangeOptionState();
-    updateStaticOperationText();
-    if (state.built) {
-      rebuildGridLabels();
-      renderTargets();
-      updateProgress();
-    } else {
-      showReadyInstruction();
-    }
+    if (state.built) render();
   }
 
-  function updateStaticOperationText() {
-    const addition = state.operation === "addition";
-    elements.activityTitle.textContent = addition ? tr().additionTitle : tr().subtractionTitle;
-    elements.scopeText.textContent = addition ? tr().scopeAddition : tr().scopeSubtraction;
-    elements.heroHint.textContent = addition ? tr().heroStartAdd : tr().heroStartSub;
-    elements.rangeBadge.textContent = elements.rangeSelect.options[elements.rangeSelect.selectedIndex].textContent;
-    elements.equation.textContent = `${state.a} ${symbol()} ${state.b} = ${state.complete ? answer() : "?"}`;
-  }
-
-  function updateRangeOptionState() {
-    for (const option of elements.rangeSelect.options) {
-      const key = option.value === "40" ? "within40" : option.value === "100" ? "within100" : "within1000";
-      option.textContent = tr()[key];
-      option.disabled = state.operation === "subtraction" && option.value === "1000";
-    }
-    if (state.operation === "subtraction" && elements.rangeSelect.value === "1000") {
-      elements.rangeSelect.value = "100";
-      state.range = 100;
-    }
-    const max = rangeLimit();
-    elements.numberA.max = String(max);
-    elements.numberB.max = String(max);
-  }
-
-  function createPlaceGrid(container, role) {
-    container.innerHTML = "";
-    container.style.setProperty("--place-count", state.activePlaces.length);
-    [...state.activePlaces].reverse().forEach(place => {
+  function createGrid(container, role) {
+    container.replaceChildren();
+    container.style.setProperty("--place-count", state.size);
+    container.style.minWidth = `${Math.max(280, state.size * 96)}px`;
+    for (let index = state.size - 1; index >= 0; index -= 1) {
       const column = document.createElement("div");
       column.className = "place-column";
-      column.dataset.place = place;
       const label = document.createElement("div");
       label.className = "place-label";
-      label.dataset.placeLabel = place;
-      label.textContent = placeLabel(place);
+      label.dataset.placeLabel = String(index);
+      label.textContent = shortPlace(index);
       const zone = document.createElement("div");
       zone.className = "block-zone drop-zone";
       zone.dataset.role = role;
-      zone.dataset.place = place;
+      zone.dataset.index = String(index);
+      zone.setAttribute("aria-label", `${placeName(index)} · ${role}`);
       column.append(label, zone);
       container.append(column);
-    });
+    }
   }
 
-  function rebuildGridLabels() {
-    document.querySelectorAll("[data-place-label]").forEach(label => { label.textContent = placeLabel(label.dataset.placeLabel); });
+  function zoneFor(role, index) {
+    return document.querySelector(`.block-zone[data-role="${role}"][data-index="${index}"]`);
   }
 
-  function zoneFor(grid, place) {
-    return grid.querySelector(`.block-zone[data-place="${place}"]`);
-  }
-
-  function createBlock(place, origin, animate = false) {
-    const block = document.createElement("img");
-    block.src = blockImages[place];
-    block.alt = placeLabel(place);
-    block.className = `math-block block-${place}${animate ? " block-pop" : ""}`;
+  function createBlock(index, origin) {
+    const asset = ["one", "ten", "hundred", "thousand"][index];
+    const block = document.createElement(asset ? "img" : "div");
+    if (asset) block.src = `assets/${asset}.png`;
+    else block.textContent = `10^${index}`;
+    block.className = `math-block ${asset ? `block-${asset}` : "block-large"}`;
+    block.alt = placeName(index);
+    block.setAttribute("role", "button");
+    block.setAttribute("aria-label", placeName(index));
     block.draggable = false;
-    block.dataset.place = place;
-    block.dataset.origin = origin;
     block.tabIndex = 0;
+    block.dataset.kind = "block";
+    block.dataset.index = String(index);
+    block.dataset.origin = origin;
     block.addEventListener("pointerdown", beginDrag);
     block.addEventListener("keydown", event => {
-      if ((event.key === "Enter" || event.key === " ") && canMoveBlock(block)) {
+      if ((event.key === "Enter" || event.key === " ") && canDrag(block)) {
         event.preventDefault();
-        moveBlockToDestination(block);
+        tapAction(block);
       }
     });
     return block;
   }
 
-  function appendBlocks(grid, counts, origin) {
-    state.activePlaces.forEach(place => {
-      const zone = zoneFor(grid, place);
-      for (let i = 0; i < counts[place]; i += 1) zone.append(createBlock(place, origin));
+  function createCarryBundle(index) {
+    const bundle = document.createElement("button");
+    bundle.type = "button";
+    bundle.className = "carry-bundle";
+    bundle.dataset.kind = "carry";
+    bundle.dataset.index = String(index);
+    bundle.draggable = false;
+    bundle.textContent = `10 × ${index < 4 ? ["1", "10", "100", "1000"][index] : `10^${index}`} →`;
+    bundle.title = tr().carryToken(placeName(index), placeName(index + 1));
+    bundle.setAttribute("aria-label", bundle.title);
+    bundle.addEventListener("pointerdown", beginDrag);
+    bundle.addEventListener("keydown", event => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        void carry(index);
+      }
+    });
+    return bundle;
+  }
+
+  function renderGrid(role, counts) {
+    counts.forEach((count, index) => {
+      const zone = zoneFor(role, index);
+      if (!zone) return;
+      zone.replaceChildren();
+      for (let item = 0; item < count; item += 1) zone.append(createBlock(index, role));
+      if (role === "result" && count >= 10 && index + 1 < state.size) zone.prepend(createCarryBundle(index));
     });
   }
 
-  function renderTargets() {
-    if (!state.built || state.operation !== "subtraction") return;
-    elements.removeTarget.innerHTML = "";
-    state.activePlaces.forEach(place => {
-      const row = document.createElement("div");
-      row.className = "target-row";
-      row.dataset.targetPlace = place;
-      row.innerHTML = `<span>${placeLabel(place)}</span><b>${state.removedCounts[place]} / ${state.targetCounts[place]}</b>`;
-      elements.removeTarget.append(row);
-    });
+  function parseInput() {
+    const first = el.numberA.value.trim();
+    const second = el.numberB.value.trim();
+    if (!/^\d+$/.test(first) || !/^\d+$/.test(second)) return { error: tr().invalidNumber };
+    const a = BigInt(first);
+    const b = BigInt(second);
+    if (state.operation === "subtraction" && a < b) return { error: tr().invalidOrder };
+    return { a, b };
   }
 
   function buildOperation() {
-    const a = Number(elements.numberA.value);
-    const b = Number(elements.numberB.value);
-    const error = validateNumbers(a, b);
-    if (error) {
-      elements.inputError.textContent = error;
-      elements.inputError.hidden = false;
+    const values = parseInput();
+    if (values.error) {
+      el.inputError.textContent = values.error;
+      el.inputError.hidden = false;
+      state.built = false;
+      el.additionBoard.hidden = true;
+      el.subtractionBoard.hidden = true;
+      el.verticalFormula.replaceChildren();
+      showFeedback(values.error, "warning");
       return;
     }
-    elements.inputError.hidden = true;
-    state.a = a;
-    state.b = b;
-    state.range = Number(elements.rangeSelect.value);
-    state.activePlaces = state.range === 1000 ? ["one", "ten", "hundred"] : ["one", "ten"];
-    state.built = true;
+    el.inputError.hidden = true;
+    state.a = values.a;
+    state.b = values.b;
+    const result = state.operation === "addition" ? values.a + values.b : values.a - values.b;
+    state.size = Math.max(1, values.a.toString().length, values.b.toString().length, result.toString().length);
+    state.sourceA = digitArray(values.a, state.size);
+    state.sourceB = digitArray(values.b, state.size);
+    state.result = zeroes();
+    state.remaining = digitArray(values.a, state.size);
+    state.removed = zeroes();
+    state.target = digitArray(values.b, state.size);
+    state.carryInto = zeroes();
+    state.borrowFrom = zeroes();
+    state.borrowInto = zeroes();
+    state.exchanges = 0;
     state.complete = false;
     state.busy = false;
-    state.placeIndex = 0;
-    state.resultCounts = { one: 0, ten: 0, hundred: 0 };
-    state.remainingCounts = digitCounts(a);
-    state.removedCounts = { one: 0, ten: 0, hundred: 0 };
-    state.targetCounts = digitCounts(b);
-    state.exchangeLog = [];
+    state.built = true;
 
     [
-      [elements.sourceAGrid, "sourceA"],
-      [elements.sourceBGrid, "sourceB"],
-      [elements.resultGrid, "result"],
-      [elements.minuendGrid, "minuend"],
-      [elements.removedGrid, "removed"]
-    ].forEach(([grid, role]) => createPlaceGrid(grid, role));
+      [el.sourceAGrid, "sourceA"], [el.sourceBGrid, "sourceB"], [el.resultGrid, "result"],
+      [el.minuendGrid, "minuend"], [el.removedGrid, "removed"]
+    ].forEach(([container, role]) => createGrid(container, role));
+    el.additionBoard.hidden = state.operation !== "addition";
+    el.subtractionBoard.hidden = state.operation !== "subtraction";
+    checkComplete();
+    render();
+    requestAnimationFrame(() => {
+      document.querySelectorAll(".number-panel").forEach(panel => { panel.scrollLeft = panel.scrollWidth; });
+      el.verticalFormula.scrollLeft = el.verticalFormula.scrollWidth;
+    });
+    showFeedback(state.complete ? tr().complete(answer().toString()) : state.operation === "addition" ? tr().readyAdd : tr().readySub,
+      state.complete ? "success" : "");
+  }
 
-    if (state.operation === "addition") {
-      appendBlocks(elements.sourceAGrid, digitCounts(a), "sourceA");
-      appendBlocks(elements.sourceBGrid, digitCounts(b), "sourceB");
-      elements.additionBoard.hidden = false;
-      elements.subtractionBoard.hidden = true;
-      elements.valueA.textContent = a;
-      elements.valueB.textContent = b;
-      elements.resultValue.textContent = "?";
-    } else {
-      appendBlocks(elements.minuendGrid, state.remainingCounts, "minuend");
-      elements.additionBoard.hidden = true;
-      elements.subtractionBoard.hidden = false;
-      elements.subValueA.textContent = a;
-      elements.subValueB.textContent = b;
-      renderTargets();
+  function borrowSourceIndex() {
+    if (state.operation !== "subtraction") return -1;
+    for (let low = 0; low < state.size; low += 1) {
+      const needed = state.target[low] - state.removed[low];
+      if (needed <= state.remaining[low]) continue;
+      for (let high = low + 1; high < state.size; high += 1) {
+        if (state.remaining[high] > 0) return high;
+      }
     }
-    elements.formulaBtn.disabled = true;
-    setStep(2);
-    updateStaticOperationText();
-    updateProgress();
+    return -1;
   }
 
-  function validateNumbers(a, b) {
-    if (!Number.isInteger(a) || !Number.isInteger(b) || a < 0 || b < 0) return tr().invalidNumber;
-    const limit = rangeLimit();
-    if (a > limit || b > limit) return tr().invalidRange(limit);
-    if (state.operation === "addition" && a + b > limit) return tr().invalidRange(limit);
-    if (state.operation === "subtraction" && a < b) return tr().invalidOrder;
-    return "";
+  function firstCarryIndex() {
+    return state.result.findIndex((count, index) => count >= 10 && index + 1 < state.size);
   }
 
-  function sourceBlocksRemaining(place) {
-    return document.querySelectorAll(`.block-zone[data-role="sourceA"][data-place="${place}"] .math-block, .block-zone[data-role="sourceB"][data-place="${place}"] .math-block`).length;
-  }
-
-  function additionNeedsExchange(place) {
-    return sourceBlocksRemaining(place) === 0 && state.resultCounts[place] >= 10 && Boolean(nextPlace(place));
-  }
-
-  function subtractionNeedsExchange(place) {
-    const stillNeeded = state.targetCounts[place] - state.removedCounts[place];
-    const higher = nextPlace(place);
-    return stillNeeded > state.remainingCounts[place] && Boolean(higher) && state.remainingCounts[higher] > 0;
-  }
-
-  function canMoveBlock(block) {
+  function canDrag(token) {
     if (!state.built || state.complete || state.busy) return false;
-    const place = block.dataset.place;
-    if (place !== activePlace()) return false;
-    if (state.operation === "addition") {
-      return block.dataset.origin === "sourceA" || block.dataset.origin === "sourceB";
-    }
-    return block.dataset.origin === "minuend" && state.removedCounts[place] < state.targetCounts[place];
+    const index = Number(token.dataset.index);
+    if (token.dataset.kind === "carry") return state.operation === "addition" && state.result[index] >= 10;
+    if (state.operation === "addition") return token.dataset.origin === "sourceA" || token.dataset.origin === "sourceB";
+    return token.dataset.origin === "minuend" &&
+      (state.removed[index] < state.target[index] || index === borrowSourceIndex());
+  }
+
+  function isValidDrop(token, target) {
+    if (!target || !canDrag(token)) return false;
+    const index = Number(token.dataset.index);
+    const targetIndex = Number(target.dataset.index);
+    if (token.dataset.kind === "carry") return target.dataset.role === "result" && targetIndex === index + 1;
+    if (state.operation === "addition") return target.dataset.role === "result" && targetIndex === index;
+    return (target.dataset.role === "removed" && targetIndex === index && state.removed[index] < state.target[index]) ||
+      (target.dataset.role === "minuend" && targetIndex === index - 1 && index === borrowSourceIndex());
   }
 
   function beginDrag(event) {
-    const block = event.currentTarget;
-    if (!canMoveBlock(block)) return;
+    const token = event.currentTarget;
+    if (!canDrag(token)) return;
     event.preventDefault();
-    const rect = block.getBoundingClientRect();
-    const ghost = block.cloneNode(false);
-    ghost.className = "drag-ghost";
+    const rect = token.getBoundingClientRect();
+    const ghost = token.cloneNode(true);
+    ghost.className = `drag-ghost${token.dataset.kind === "carry" ? " ghost-bundle" : ""}`;
     ghost.style.width = `${rect.width}px`;
     ghost.style.height = `${rect.height}px`;
     ghost.style.left = `${rect.left}px`;
     ghost.style.top = `${rect.top}px`;
     document.body.append(ghost);
-    block.style.opacity = ".28";
-    const drag = {
-      block,
-      ghost,
-      pointerId: event.pointerId,
-      startX: event.clientX,
-      startY: event.clientY,
-      offsetX: event.clientX - rect.left,
-      offsetY: event.clientY - rect.top,
-      moved: false,
-      frame: 0,
-      x: event.clientX,
-      y: event.clientY
-    };
-    block.setPointerCapture?.(event.pointerId);
-
+    token.style.opacity = ".25";
+    let moved = false;
+    let frame = 0;
+    let x = event.clientX;
+    let y = event.clientY;
+    const offsetX = x - rect.left;
+    const offsetY = y - rect.top;
     const paint = () => {
-      drag.frame = 0;
-      ghost.style.left = `${drag.x - drag.offsetX}px`;
-      ghost.style.top = `${drag.y - drag.offsetY}px`;
+      frame = 0;
+      ghost.style.left = `${x - offsetX}px`;
+      ghost.style.top = `${y - offsetY}px`;
     };
+    const clearHighlight = () => document.querySelectorAll(".drop-ready").forEach(zone => zone.classList.remove("drop-ready"));
     const move = moveEvent => {
-      drag.x = moveEvent.clientX;
-      drag.y = moveEvent.clientY;
-      if (Math.hypot(drag.x - drag.startX, drag.y - drag.startY) > 5) drag.moved = true;
-      if (!drag.frame) drag.frame = requestAnimationFrame(paint);
-      highlightDropTarget(drag.x, drag.y, block.dataset.place);
+      if (moveEvent.pointerId !== event.pointerId) return;
+      x = moveEvent.clientX;
+      y = moveEvent.clientY;
+      if (Math.hypot(x - event.clientX, y - event.clientY) > 5) moved = true;
+      if (!frame) frame = requestAnimationFrame(paint);
+      clearHighlight();
+      const target = document.elementFromPoint(x, y)?.closest(".drop-zone");
+      if (isValidDrop(token, target)) target.classList.add("drop-ready");
+    };
+    const cleanUp = () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", end);
+      window.removeEventListener("pointercancel", cancel);
+      if (frame) cancelAnimationFrame(frame);
+      clearHighlight();
+      ghost.remove();
+      token.style.opacity = "";
     };
     const end = endEvent => {
-      window.removeEventListener("pointermove", move);
-      window.removeEventListener("pointerup", end);
-      window.removeEventListener("pointercancel", cancel);
-      if (drag.frame) cancelAnimationFrame(drag.frame);
-      document.querySelectorAll(".drop-ready").forEach(zone => zone.classList.remove("drop-ready"));
-      ghost.remove();
-      block.style.opacity = "";
-      if (!drag.moved) {
-        moveBlockToDestination(block);
-      } else {
-        const target = document.elementFromPoint(endEvent.clientX, endEvent.clientY)?.closest(".drop-zone");
-        if (isValidDrop(block, target)) moveBlockToDestination(block, target);
-        else showFeedback(tr().wrongDrop, "warning");
-      }
+      if (endEvent.pointerId !== event.pointerId) return;
+      const target = document.elementFromPoint(endEvent.clientX, endEvent.clientY)?.closest(".drop-zone");
+      cleanUp();
+      if (!moved) tapAction(token);
+      else if (isValidDrop(token, target)) performDrop(token, target);
+      else showFeedback(tr().wrongDrop, "warning");
     };
-    const cancel = () => {
-      window.removeEventListener("pointermove", move);
-      window.removeEventListener("pointerup", end);
-      window.removeEventListener("pointercancel", cancel);
-      ghost.remove();
-      block.style.opacity = "";
-      document.querySelectorAll(".drop-ready").forEach(zone => zone.classList.remove("drop-ready"));
-    };
+    const cancel = () => cleanUp();
     window.addEventListener("pointermove", move, { passive: false });
-    window.addEventListener("pointerup", end, { once: true });
-    window.addEventListener("pointercancel", cancel, { once: true });
+    window.addEventListener("pointerup", end);
+    window.addEventListener("pointercancel", cancel);
   }
 
-  function destinationFor(block) {
-    const grid = state.operation === "addition" ? elements.resultGrid : elements.removedGrid;
-    return zoneFor(grid, block.dataset.place);
+  function tapAction(token) {
+    if (!canDrag(token)) return;
+    const index = Number(token.dataset.index);
+    if (token.dataset.kind === "carry") { void carry(index); return; }
+    if (state.operation === "addition") { moveUnit(token.dataset.origin, index); return; }
+    if (state.removed[index] < state.target[index]) moveUnit("minuend", index);
+    else if (index === borrowSourceIndex()) void borrow(index);
   }
 
-  function isValidDrop(block, target) {
-    if (!target || !canMoveBlock(block)) return false;
-    const role = state.operation === "addition" ? "result" : "removed";
-    return target.dataset.role === role && target.dataset.place === block.dataset.place;
+  function performDrop(token, target) {
+    const index = Number(token.dataset.index);
+    if (token.dataset.kind === "carry") { void carry(index); return; }
+    if (state.operation === "addition" || target.dataset.role === "removed") moveUnit(token.dataset.origin, index);
+    else void borrow(index);
   }
 
-  function highlightDropTarget(x, y, place) {
-    document.querySelectorAll(".drop-ready").forEach(zone => zone.classList.remove("drop-ready"));
-    const target = document.elementFromPoint(x, y)?.closest(".drop-zone");
-    const role = state.operation === "addition" ? "result" : "removed";
-    if (target?.dataset.role === role && target.dataset.place === place) target.classList.add("drop-ready");
-  }
-
-  function moveBlockToDestination(block, explicitTarget = null) {
-    if (!canMoveBlock(block)) return;
-    const target = explicitTarget || destinationFor(block);
-    const place = block.dataset.place;
-    target.append(block);
-    block.classList.add("block-pop");
-    setTimeout(() => block.classList.remove("block-pop"), 360);
-
+  function moveUnit(origin, index) {
+    if (state.complete || state.busy) return;
     if (state.operation === "addition") {
-      block.dataset.origin = "result";
-      state.resultCounts[place] += 1;
+      state[origin][index] -= 1;
+      state.result[index] += 1;
     } else {
-      block.dataset.origin = "removed";
-      block.classList.add("block-remove");
-      state.remainingCounts[place] -= 1;
-      state.removedCounts[place] += 1;
+      state.remaining[index] -= 1;
+      state.removed[index] += 1;
     }
-    updateProgress();
+    checkComplete();
+    render();
+    showFeedback(state.complete ? tr().complete(answer().toString()) : tr().moveDone, state.complete ? "success" : "");
   }
 
-  async function runExchange() {
-    if (state.busy || state.complete) return;
-    const place = activePlace();
-    const higher = nextPlace(place);
-    if (!higher) return;
+  async function playAnimation(token, keyframes, options) {
+    if (!token || !token.animate || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    try { await token.animate(keyframes, options).finished; } catch { /* A reset may cancel the animation. */ }
+  }
+
+  async function carry(index) {
+    if (!canDrag({ dataset: { kind: "carry", index: String(index) } })) return;
     state.busy = true;
-    updateProgress();
-    if (state.operation === "addition") await animateCombine(place, higher);
-    else await animateSplit(higher, place);
-    state.busy = false;
-    updateProgress();
-  }
-
-  async function animateCombine(from, to) {
-    const fromZone = zoneFor(elements.resultGrid, from);
-    const toZone = zoneFor(elements.resultGrid, to);
-    const blocks = [...fromZone.querySelectorAll(".math-block")].slice(0, 10);
-    const zoneRect = fromZone.getBoundingClientRect();
-    const centerX = zoneRect.left + zoneRect.width / 2;
-    const centerY = zoneRect.top + zoneRect.height / 2;
-    await Promise.all(blocks.map((block, index) => {
+    const from = zoneFor("result", index);
+    const to = zoneFor("result", index + 1);
+    const blocks = [...from.querySelectorAll(".math-block")].slice(0, 10);
+    const destination = to.getBoundingClientRect();
+    await Promise.all(blocks.map((block, order) => {
       const rect = block.getBoundingClientRect();
-      return block.animate([
+      return playAnimation(block, [
         { transform: "translate(0,0) scale(1)", opacity: 1 },
-        { transform: `translate(${centerX - (rect.left + rect.width / 2)}px, ${centerY - (rect.top + rect.height / 2)}px) scale(.22)`, opacity: .15 }
-      ], { duration: 620, delay: index * 18, easing: "cubic-bezier(.2,.8,.2,1)", fill: "forwards" }).finished;
+        { transform: `translate(${destination.left + destination.width / 2 - rect.left - rect.width / 2}px, ${destination.top + destination.height / 2 - rect.top - rect.height / 2}px) scale(.15)`, opacity: .1 }
+      ], { duration: 430, delay: order * 15, easing: "ease-in", fill: "forwards" });
     }));
-    blocks.forEach(block => block.remove());
-    state.resultCounts[from] -= 10;
-    state.resultCounts[to] += 1;
-    toZone.append(createBlock(to, "result", true));
-    state.exchangeLog.push({ type: "combine", from, to });
-    showFeedback(tr().exchangeAddDone(placeLabel(from), placeLabel(to)), "success");
+    state.result[index] -= 10;
+    state.result[index + 1] += 1;
+    state.carryInto[index + 1] += 1;
+    state.exchanges += 1;
+    state.busy = false;
+    checkComplete();
+    render();
+    showFeedback(state.complete ? tr().complete(answer().toString()) : tr().carryDone(placeName(index), placeName(index + 1)), "success");
   }
 
-  async function animateSplit(from, to) {
-    const fromZone = zoneFor(elements.minuendGrid, from);
-    const toZone = zoneFor(elements.minuendGrid, to);
-    const block = fromZone.querySelector(".math-block");
-    if (!block) return;
-    const fromRect = block.getBoundingClientRect();
-    const toRect = toZone.getBoundingClientRect();
-    await block.animate([
+  async function borrow(index) {
+    if (state.complete || state.busy || index !== borrowSourceIndex()) {
+      showFeedback(tr().unavailable, "warning");
+      return;
+    }
+    state.busy = true;
+    const from = zoneFor("minuend", index);
+    const to = zoneFor("minuend", index - 1);
+    const block = from.querySelector(".math-block");
+    const before = block.getBoundingClientRect();
+    const after = to.getBoundingClientRect();
+    await playAnimation(block, [
       { transform: "translate(0,0) scale(1)", opacity: 1 },
-      { transform: `translate(${toRect.left + toRect.width / 2 - (fromRect.left + fromRect.width / 2)}px, ${toRect.top + toRect.height / 2 - (fromRect.top + fromRect.height / 2)}px) scale(.35)`, opacity: .12 }
-    ], { duration: 720, easing: "cubic-bezier(.2,.8,.2,1)", fill: "forwards" }).finished;
-    block.remove();
-    state.remainingCounts[from] -= 1;
-    state.remainingCounts[to] += 10;
-    for (let i = 0; i < 10; i += 1) {
-      const child = createBlock(to, "minuend", true);
-      child.style.animationDelay = `${i * 35}ms`;
-      toZone.append(child);
-    }
-    state.exchangeLog.push({ type: "split", from, to });
-    showFeedback(tr().exchangeSubDone(placeLabel(from), placeLabel(to)), "success");
+      { transform: `translate(${after.left + after.width / 2 - before.left - before.width / 2}px, ${after.top + after.height / 2 - before.top - before.height / 2}px) scale(.22)`, opacity: .1 }
+    ], { duration: 560, easing: "ease-in", fill: "forwards" });
+    state.remaining[index] -= 1;
+    state.remaining[index - 1] += 10;
+    state.borrowFrom[index] += 1;
+    state.borrowInto[index - 1] += 10;
+    state.exchanges += 1;
+    state.busy = false;
+    render();
+    showFeedback(tr().borrowDone(placeName(index), placeName(index - 1)), "success");
   }
 
-  function updateProgress() {
-    if (!state.built) return;
-    const place = activePlace();
-    document.querySelectorAll(".block-zone").forEach(zone => zone.classList.toggle("active-place", zone.dataset.place === place));
-    document.querySelectorAll(".math-block").forEach(block => block.classList.toggle("locked", !canMoveBlock(block)));
-
-    let showExchange = false;
-    let canContinue = false;
+  function checkComplete() {
     if (state.operation === "addition") {
-      showExchange = additionNeedsExchange(place);
-      canContinue = sourceBlocksRemaining(place) === 0 && !showExchange;
-      elements.instructionTitle.textContent = tr().moveAddTitle(placeLabel(place));
-      elements.instructionText.textContent = tr().moveAddText(placeLabel(place));
-      showFeedback(showExchange ? tr().needExchange : tr().dragHintAdd(placeLabel(place)), showExchange ? "warning" : "");
+      state.complete = state.sourceA.every(count => count === 0) && state.sourceB.every(count => count === 0) &&
+        state.result.every(count => count < 10);
     } else {
-      const stillNeeded = state.targetCounts[place] - state.removedCounts[place];
-      showExchange = subtractionNeedsExchange(place);
-      canContinue = stillNeeded === 0;
-      elements.instructionTitle.textContent = tr().moveSubTitle(placeLabel(place));
-      elements.instructionText.textContent = tr().moveSubText(state.targetCounts[place], placeLabel(place));
-      showFeedback(showExchange ? tr().needExchange : tr().dragHintSub(Math.max(0, stillNeeded), placeLabel(place)), showExchange ? "warning" : "");
-      elements.removedProgress.textContent = `${Object.values(state.removedCounts).reduce((sum, value) => sum + value, 0)} / ${Object.values(state.targetCounts).reduce((sum, value) => sum + value, 0)}`;
-      renderTargets();
+      state.complete = state.removed.every((count, index) => count === state.target[index]) &&
+        state.remaining.every(count => count < 10);
     }
-
-    const higher = nextPlace(place);
-    elements.exchangeBtn.hidden = !showExchange;
-    elements.exchangeBtn.disabled = state.busy;
-    if (showExchange) {
-      elements.exchangeBtn.textContent = state.operation === "addition"
-        ? tr().exchangeAdd(placeLabel(place), placeLabel(higher))
-        : tr().exchangeSub(placeLabel(higher), placeLabel(place));
-    }
-    elements.nextBtn.disabled = !canContinue || state.busy;
-    elements.nextBtn.textContent = state.placeIndex === state.activePlaces.length - 1 ? tr().finish : tr().nextPlace(placeLabel(state.activePlaces[state.placeIndex + 1]));
-    elements.instructionNumber.textContent = String(state.placeIndex + 1);
   }
 
-  function advancePlace() {
-    if (elements.nextBtn.disabled || state.busy) return;
-    if (state.placeIndex < state.activePlaces.length - 1) {
-      state.placeIndex += 1;
-      updateProgress();
+  function isPlaceResolved(index) {
+    for (let place = 0; place <= index; place += 1) {
+      if (state.operation === "addition") {
+        if (state.sourceA[place] || state.sourceB[place] || state.result[place] >= 10) return false;
+      } else if (state.removed[place] !== state.target[place]) return false;
+    }
+    return (state.operation === "addition" ? state.result[index] : state.remaining[index]) < 10;
+  }
+
+  function renderFormula() {
+    const board = document.createElement("div");
+    board.className = "formula-grid";
+    board.style.setProperty("--formula-places", state.size);
+    const row = (className, lead, values) => {
+      const line = document.createElement("div");
+      line.className = `formula-row ${className}`;
+      const operator = document.createElement("span");
+      operator.className = "formula-operator";
+      operator.textContent = lead;
+      line.append(operator);
+      for (let index = state.size - 1; index >= 0; index -= 1) {
+        const cell = document.createElement("span");
+        cell.className = "formula-cell";
+        cell.textContent = values[index] ?? "";
+        line.append(cell);
+      }
+      return line;
+    };
+    const aDigits = digitArray(state.a, state.size);
+    const bDigits = digitArray(state.b, state.size);
+    const originalA = state.a.toString().length;
+    const originalB = state.b.toString().length;
+    board.append(row("formula-places", "", Array.from({ length: state.size }, (_, i) => shortPlace(i))));
+    board.append(row("formula-notes", "", Array.from({ length: state.size }, (_, i) => {
+      if (state.operation === "addition") return state.carryInto[i] ? `+${state.carryInto[i]}` : "";
+      if (state.borrowFrom[i] || state.borrowInto[i]) {
+        return `${aDigits[i]}→${aDigits[i] + state.borrowInto[i] - state.borrowFrom[i]}`;
+      }
+      return "";
+    })));
+    board.append(row("formula-number", "", aDigits.map((digit, i) => i < originalA ? String(digit) : "")));
+    board.append(row("formula-number formula-second", sign(), bDigits.map((digit, i) => i < originalB ? String(digit) : "")));
+    board.append(row("formula-answer", "=", Array.from({ length: state.size }, (_, i) => isPlaceResolved(i) ?
+      String(state.operation === "addition" ? state.result[i] : state.remaining[i]) : "?")));
+    el.verticalFormula.replaceChildren(board);
+  }
+
+  function renderSteps() {
+    const moved = state.operation === "addition" ?
+      total(digitArray(state.a, state.size)) + total(digitArray(state.b, state.size)) - total(state.sourceA) - total(state.sourceB) :
+      total(state.removed);
+    const planned = state.operation === "addition" ?
+      total(digitArray(state.a, state.size)) + total(digitArray(state.b, state.size)) : total(state.target);
+    el.stepMoveText.textContent = state.operation === "addition" ? tr().moveProgress(moved, planned) : tr().removeProgress(moved, planned);
+    const carryIndex = firstCarryIndex();
+    const borrowIndex = borrowSourceIndex();
+    if (state.operation === "addition" && carryIndex >= 0) {
+      el.stepExchangeText.textContent = tr().carryReady(placeName(carryIndex), placeName(carryIndex + 1));
+    } else if (state.operation === "subtraction" && borrowIndex >= 0) {
+      el.stepExchangeText.textContent = tr().borrowReady(placeName(borrowIndex), placeName(borrowIndex - 1));
     } else {
-      finishOperation();
+      el.stepExchangeText.textContent = state.exchanges ? tr().exchangeCount(state.exchanges) : tr().exchangeIdle;
     }
+    const resolved = Array.from({ length: state.size }, (_, i) => isPlaceResolved(i)).filter(Boolean).length;
+    el.stepFormulaText.textContent = state.complete ? tr().formulaDone : tr().formulaProgress(resolved, state.size);
+    document.querySelectorAll(".step-list li").forEach(item => {
+      const step = Number(item.dataset.step);
+      item.classList.toggle("active", !state.complete && (step === 1 && moved < planned ||
+        step === 2 && (carryIndex >= 0 || borrowIndex >= 0) || step === 3 && moved === planned && carryIndex < 0 && borrowIndex < 0));
+      item.classList.toggle("done", state.complete || step === 1 && moved === planned || step === 2 && state.exchanges > 0);
+    });
   }
 
-  function finishOperation() {
-    state.complete = true;
-    setStep(3);
-    elements.resultValue.textContent = answer();
-    elements.formulaBtn.disabled = false;
-    elements.exchangeBtn.hidden = true;
-    elements.nextBtn.disabled = true;
-    elements.nextBtn.textContent = tr().finish;
-    elements.instructionNumber.textContent = "✓";
-    elements.instructionTitle.textContent = state.operation === "addition" ? tr().additionTitle : tr().subtractionTitle;
-    elements.instructionText.textContent = state.operation === "addition" ? tr().completeAdd(answer()) : tr().completeSub(answer());
-    showFeedback(state.operation === "addition" ? tr().completeAdd(answer()) : tr().completeSub(answer()), "success");
-    updateStaticOperationText();
-    document.querySelectorAll(".math-block").forEach(block => block.classList.add("locked"));
+  function render() {
+    if (!state.built) return;
+    const addition = state.operation === "addition";
+    el.activityTitle.textContent = addition ? tr().additionTitle : tr().subtractionTitle;
+    el.scopeText.textContent = addition ? tr().scopeAddition : tr().scopeSubtraction;
+    el.heroHint.textContent = addition ? tr().heroAdd : tr().heroSub;
+    el.equation.textContent = `${state.a} ${sign()} ${state.b} = ${state.complete ? answer() : "?"}`;
+    el.valueA.textContent = state.a;
+    el.valueB.textContent = state.b;
+    el.resultValue.textContent = state.complete ? answer() : "?";
+    el.subValueA.textContent = state.a;
+    el.removedProgress.textContent = `${total(state.removed)} / ${total(state.target)}`;
+    document.querySelectorAll("[data-place-label]").forEach(label => { label.textContent = shortPlace(Number(label.dataset.placeLabel)); });
+    if (addition) {
+      renderGrid("sourceA", state.sourceA);
+      renderGrid("sourceB", state.sourceB);
+      renderGrid("result", state.result);
+    } else {
+      renderGrid("minuend", state.remaining);
+      renderGrid("removed", state.removed);
+    }
+    renderFormula();
+    renderSteps();
   }
 
-  function showReadyInstruction() {
-    elements.instructionNumber.textContent = "1";
-    elements.instructionTitle.textContent = tr().readyTitle;
-    elements.instructionText.textContent = tr().readyText;
-    elements.feedback.textContent = tr().noRandom;
-    elements.feedback.className = "feedback";
-  }
-
-  function showFeedback(message, type = "") {
-    elements.feedback.textContent = message;
-    elements.feedback.className = `feedback${type ? ` ${type}` : ""}`;
-  }
-
-  function setStep(step) {
-    document.querySelectorAll(".step-strip li").forEach(item => item.classList.toggle("active", Number(item.dataset.step) === step));
-  }
-
-  function openFormula() {
-    if (!state.complete) return;
-    const width = state.range === 1000 ? 3 : 2;
-    const pad = value => String(value).padStart(width, " ").split("").join(" ");
-    elements.verticalFormula.innerHTML = `
-      <div class="formula-line">${pad(state.a)}</div>
-      <div class="formula-line operator">${symbol()} ${pad(state.b)}</div>
-      <div class="formula-line">${pad(answer())}</div>
-    `;
-    elements.formulaExplanation.textContent = state.operation === "addition" ? tr().formulaAdd : tr().formulaSub;
-    elements.formulaModal.hidden = false;
-    elements.formulaModal.setAttribute("aria-hidden", "false");
-    elements.modalClose.focus();
-  }
-
-  function closeFormula() {
-    elements.formulaModal.hidden = true;
-    elements.formulaModal.setAttribute("aria-hidden", "true");
-    elements.formulaBtn.focus();
+  function showFeedback(message, kind = "") {
+    el.feedback.textContent = message;
+    el.feedback.className = `feedback${kind ? ` ${kind}` : ""}`;
   }
 
   function switchOperation(operation) {
     if (state.busy) return;
     state.operation = operation;
     document.querySelectorAll("[data-operation]").forEach(button => button.classList.toggle("active", button.dataset.operation === operation));
-    if (operation === "addition") {
-      elements.numberA.value = "28";
-      elements.numberB.value = "6";
-      if (elements.rangeSelect.value === "1000") state.range = 1000;
-    } else {
-      if (elements.rangeSelect.value === "1000") elements.rangeSelect.value = "100";
-      state.range = Number(elements.rangeSelect.value);
-      elements.numberA.value = "32";
-      elements.numberB.value = "9";
-    }
-    state.a = Number(elements.numberA.value);
-    state.b = Number(elements.numberB.value);
-    state.built = false;
-    state.complete = false;
-    updateRangeOptionState();
-    updateStaticOperationText();
-    buildOperation();
-  }
-
-  function resetTool() {
-    if (state.busy) return;
-    elements.numberA.value = state.operation === "addition" ? "28" : "32";
-    elements.numberB.value = state.operation === "addition" ? "6" : "9";
-    elements.rangeSelect.value = state.operation === "addition" ? "40" : "40";
-    state.range = 40;
-    state.a = Number(elements.numberA.value);
-    state.b = Number(elements.numberB.value);
     buildOperation();
   }
 
   document.querySelectorAll("[data-lang]").forEach(button => button.addEventListener("click", () => applyLanguage(button.dataset.lang)));
   document.querySelectorAll("[data-operation]").forEach(button => button.addEventListener("click", () => switchOperation(button.dataset.operation)));
-  elements.rangeSelect.addEventListener("change", () => {
-    state.range = Number(elements.rangeSelect.value);
-    updateRangeOptionState();
-    updateStaticOperationText();
+  [el.numberA, el.numberB].forEach(input => input.addEventListener("keydown", event => {
+    if (event.key === "Enter") buildOperation();
+  }));
+  el.buildBtn.addEventListener("click", buildOperation);
+  el.resetBtn.addEventListener("click", () => {
+    if (state.busy) return;
+    el.numberA.value = state.operation === "addition" ? "28" : "32";
+    el.numberB.value = state.operation === "addition" ? "6" : "9";
+    buildOperation();
   });
-  elements.buildBtn.addEventListener("click", buildOperation);
-  elements.resetBtn.addEventListener("click", resetTool);
-  elements.exchangeBtn.addEventListener("click", runExchange);
-  elements.nextBtn.addEventListener("click", advancePlace);
-  elements.formulaBtn.addEventListener("click", openFormula);
-  elements.modalClose.addEventListener("click", closeFormula);
-  elements.formulaModal.addEventListener("click", event => { if (event.target === elements.formulaModal) closeFormula(); });
-  document.addEventListener("keydown", event => { if (event.key === "Escape" && !elements.formulaModal.hidden) closeFormula(); });
+
+  let syncingScroll = false;
+  document.querySelectorAll(".number-panel").forEach(panel => panel.addEventListener("scroll", () => {
+    if (syncingScroll) return;
+    syncingScroll = true;
+    const travel = Math.max(1, panel.scrollWidth - panel.clientWidth);
+    const fraction = panel.scrollLeft / travel;
+    document.querySelectorAll(".number-panel").forEach(other => {
+      if (other !== panel) other.scrollLeft = fraction * Math.max(0, other.scrollWidth - other.clientWidth);
+    });
+    el.verticalFormula.scrollLeft = fraction * Math.max(0, el.verticalFormula.scrollWidth - el.verticalFormula.clientWidth);
+    syncingScroll = false;
+  }));
 
   applyLanguage("zh");
   buildOperation();

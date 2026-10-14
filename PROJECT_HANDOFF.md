@@ -40,7 +40,7 @@ The PDF was inspected page by page. Relevant content includes:
 - Subtraction within 40 and within 100.
 - Operations proceed from ones to tens to hundreds.
 
-The supplied PDF does not establish three-digit subtraction, so this tool intentionally disables subtraction within 1000.
+The PDF examples establish the original base-ten block method. After reviewing the first test version, the user explicitly asked to remove fixed numerical ranges. The tool now applies the same exchange mechanism to user-entered whole numbers of any digit length. Larger inputs are not represented as textbook examples or newly invented questions.
 
 Reference examples observed in the material include `24 + 3`, `17 + 20`, `14 + 25`, `28 + 6`, `14 + 18`, `27 − 4`, `34 − 20`, `38 − 22`, `32 − 9`, `40 − 29`, `42 + 56`, `33 + 18`, `54 − 38`, `271 + 27`, `145 + 112`, `215 + 126`, and `182 + 193`.
 
@@ -48,16 +48,19 @@ Reference examples observed in the material include `24 + 3`, `17 + 20`, `14 + 2
 
 - Only block addition and subtraction are included.
 - No counting tool, number pattern tool, random question generator, quiz mode, or Q&A flow.
-- The teacher manually enters both numbers.
+- Numbers are entered manually; there is no fixed 40/100/1000 range selector.
+- The default blocks appear immediately on page load, ready for pupils to drag.
 - The answer starts as `?` and is shown only after the learner completes the block operation.
-- Reuse the visual blocks from the previous Block Math tool.
+- Reuse the one, ten, hundred, and thousand visual blocks from the previous Block Math tool. Higher place-value units have a clearly labelled tile.
 - Addition must visibly demonstrate:
-  - 10 ones gathering and changing into 1 ten.
-  - 10 tens gathering and changing into 1 hundred.
+  - Pupils drag the two groups into matching place-value columns.
+  - When 10 blocks collect in a result column, pupils drag a yellow bundle to the next higher column to combine them into one.
 - Subtraction must visibly demonstrate:
-  - 1 ten changing into 10 ones when there are not enough ones.
+  - Pupils drag blocks into the taken-away area.
+  - When there are too few blocks, pupils drag one block from a higher column to the adjacent lower column and split it into 10. Consecutive borrowing across zero columns is supported.
 - Blocks must support smooth pointer dragging. Tapping a block and keyboard Enter/Space are also supported.
-- A vertical-form explanation becomes available only after the block operation is complete.
+- The vertical working is visible on the right from the start. It shows user-performed carries/borrows and fills result digits as the blocks are settled.
+- The three guidance steps run from top to bottom. There are no exchange, next-step, or formula-modal buttons.
 - Languages: Bahasa Melayu, Chinese, and English.
 - Responsive layout must work on desktop and mobile without horizontal overflow.
 
@@ -71,23 +74,22 @@ Main files:
 - `assets/one.png` — purple one cube reused from the previous tool.
 - `assets/ten.png` — green ten rod reused from the previous tool.
 - `assets/hundred.png` — blue hundred flat reused from the previous tool.
+- `assets/thousand.png` — thousand cube reused from the previous tool.
 - `README.md` — project overview and local running instructions.
 - `tests/server.mjs` — local static server on `http://127.0.0.1:8788`.
 - `tests/smoke.mjs` — Chrome DevTools Protocol smoke test.
 - `.gitignore` — excludes screenshots and temporary Chrome profiles.
 
-Default demonstration: `28 + 6`, which requires exchanging 10 ones for 1 ten.
+Default demonstration: `28 + 6`, ready for dragging on page load. The pupil combines 10 ones into 1 ten.
 
 Subtraction regression example: `32 − 9`, which requires splitting 1 ten into 10 ones.
 
 ## Validation rules
 
-- Values must be non-negative whole numbers.
-- Within-40 mode: values and answer may not exceed 40.
-- Within-100 mode: values and answer may not exceed 99.
-- Within-1000 addition: values and answer may not exceed 999.
+- Values must be non-negative whole numbers typed with digits 0–9.
+- There is no preset numeric limit; BigInt and dynamic place-value columns support longer user-entered numbers.
 - For subtraction, the first value must be greater than or equal to the second value.
-- Within-1000 is disabled for subtraction because it is not supported by the supplied PDF.
+- The tool does not generate or label larger inputs as textbook examples.
 
 ## Tests already completed
 
@@ -96,12 +98,13 @@ The automated smoke test passed all of the following:
 - JavaScript syntax checks.
 - All block images load successfully.
 - Answer is hidden before completion.
-- A real pointer drag moves a block to the correct place-value column.
-- `28 + 6` exchanges 10 ones for 1 ten and finishes as 34.
-- `32 − 9` splits 1 ten into 10 ones and finishes as 23.
-- `182 + 193` exchanges 10 tens for 1 hundred and finishes as 375.
-- The vertical-form button unlocks only after completion.
-- The subtraction 1000 option remains disabled.
+- The default blocks are ready and the vertical working is visible before any click.
+- A real pointer drag places a block into the matching result column.
+- `28 + 6`: pupil drags the yellow ten-block bundle to carry and finishes at 34.
+- `32 − 9`: pupil drags a ten to the ones column to borrow and finishes at 23.
+- `1000 − 1`: three consecutive pupil-driven borrows finish at 999.
+- `999 + 1`: three consecutive pupil-driven carries finish at 1000.
+- A 20-digit user-entered number creates 20 place-value columns without a range choice.
 - BM, Chinese, and English switches work.
 - Desktop and 390px mobile layouts have no horizontal overflow.
 - No browser runtime errors were detected.
@@ -121,7 +124,7 @@ node tests\smoke.mjs
 
 ## Next steps
 
-The user has said the current addition/subtraction experience is not yet what they want and will provide detailed changes. Treat the live page as a test draft.
+The first test version was revised following the user's instructions: immediate student dragging, an always-visible vertical working area on the right, manual carrying and borrowing, open number inputs, and steps arranged top to bottom. Treat this as a testing version until the user reviews it.
 
 1. The project is pushed to `WelsonAI/tools-BlockOperationsTool` on branch `main`.
 2. The live GitHub Pages testing link is `https://welsonai.github.io/tools-BlockOperationsTool/` (HTTP 200 verified on 2026-10-14).
