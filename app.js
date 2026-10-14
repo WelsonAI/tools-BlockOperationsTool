@@ -613,8 +613,12 @@
     })));
     board.append(row("formula-number", "", aDigits.map((digit, i) => i < originalA ? String(digit) : "")));
     board.append(row("formula-number formula-second", sign(), bDigits.map((digit, i) => i < originalB ? String(digit) : "")));
-    board.append(row("formula-answer", "=", Array.from({ length: state.size }, (_, i) => isPlaceResolved(i) ?
-      String(state.operation === "addition" ? state.result[i] : state.remaining[i]) : "?")));
+    const answerDigits = Array.from({ length: state.size }, (_, i) => isPlaceResolved(i) ?
+      String(state.operation === "addition" ? state.result[i] : state.remaining[i]) : "?");
+    for (let index = state.size - 1; index > 0 && answerDigits[index] === "0"; index -= 1) {
+      answerDigits[index] = "";
+    }
+    board.append(row("formula-answer", "=", answerDigits));
     el.verticalFormula.replaceChildren(board);
   }
 

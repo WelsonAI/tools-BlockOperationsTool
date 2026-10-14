@@ -157,9 +157,41 @@ try {
   for (const from of [3, 2, 1]) {
     await drag(`[data-role="minuend"][data-index="${from}"] .math-block`, `[data-role="minuend"][data-index="${from - 1}"]`);
     await waitFor(`document.querySelectorAll('[data-role="minuend"][data-index="${from - 1}"] .math-block').length === 10`);
+    if (from === 3) {
+      assert(await evaluate(`(() => {
+        const blocks = [...document.querySelectorAll('[data-role="minuend"][data-index="2"] .math-block')];
+        const lefts = blocks.map(block => Math.round(block.getBoundingClientRect().left));
+        const tops = blocks.map(block => Math.round(block.getBoundingClientRect().top));
+        return blocks.length === 10 && new Set(lefts).size === 2 && new Set(tops).size === 5;
+      })()`), "Ten hundred-blocks should form two columns and five rows.");
+    }
   }
   await pressFirst('[data-role="minuend"][data-index="0"] .math-block', 1);
   await waitFor(`document.querySelector('#equation').textContent.includes('= 999')`);
+  assert(await evaluate(`(() => {
+    const cells = [...document.querySelectorAll('.formula-answer .formula-cell')].map(cell => cell.textContent);
+    return cells.join('') === '999' && cells[0] === '';
+  })()`), "The vertical answer should omit its leading zero.");
+
+  await setNumbers("1000", "99");
+  await pressFirst('[data-role="bank"][data-index="3"] .math-block', 1);
+  for (const from of [3, 2, 1]) {
+    await drag(`[data-role="minuend"][data-index="${from}"] .math-block`, `[data-role="minuend"][data-index="${from - 1}"]`);
+    await waitFor(`document.querySelectorAll('[data-role="minuend"][data-index="${from - 1}"] .math-block').length === 10`);
+  }
+  await pressFirst('[data-role="minuend"][data-index="0"] .math-block', 9);
+  await pressFirst('[data-role="minuend"][data-index="1"] .math-block', 9);
+  await waitFor(`document.querySelector('#equation').textContent.includes('= 901')`);
+  assert(await evaluate(`(() => {
+    const cells = [...document.querySelectorAll('.formula-answer .formula-cell')].map(cell => cell.textContent);
+    return cells.join('') === '901' && cells[0] === '' && cells[2] === '0';
+  })()`), "The vertical answer should keep an internal zero while omitting its leading zero.");
+  await evaluate(`document.querySelector('#subtractionBoard').scrollIntoView({ block: 'start' })`);
+  await screenshot("qa-compact-hundreds.png");
+  await send("Emulation.setDeviceMetricsOverride", { width: 390, height: 900, deviceScaleFactor: 1, mobile: true });
+  assert(await evaluate(`document.documentElement.scrollWidth <= document.documentElement.clientWidth`),
+    "Four-place block grids should scroll inside their panel, not widen the mobile page.");
+  await send("Emulation.setDeviceMetricsOverride", { width: 1440, height: 1050, deviceScaleFactor: 1, mobile: false });
 
   await setNumbers("500", "28");
   await pressFirst('[data-role="bank"][data-index="2"] .math-block', 5);
